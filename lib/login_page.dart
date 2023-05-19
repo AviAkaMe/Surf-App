@@ -7,6 +7,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+//TODO everything :)
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
