@@ -11,32 +11,48 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue[50],
       body: SafeArea(
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const SizedBox(height: 20),
-            const Text(
-              'B-Surf',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              height: 10,
+              child: Image.asset('images/BB.png'),
             ),
-            const SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.yellow,
-                  border: Border.all(color: Colors.deepOrange),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Email Adress',
-                    ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       border: Border.all(color: Colors.black),
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     child: const Padding(
+            //       padding: EdgeInsets.only(left: 20.0),
+            //       child: TextField(
+            //         decoration: InputDecoration(
+            //           border: InputBorder.none,
+            //           hintText: 'Email Address',
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25.0),
+              child: TextField(
+                //controller: controller,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: ' Email Address',
                 ),
               ),
             ),
@@ -45,8 +61,8 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.yellow,
-                  border: Border.all(color: Colors.deepOrange),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Padding(
@@ -55,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Passssssssss-word',
+                      hintText: 'Password',
                     ),
                   ),
                 ),
@@ -64,14 +80,14 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
               Text(
-                'are you ahabel? ',
+                'Forgot your password? ',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                 ),
               ),
               Text(
-                'reset',
+                'Reset',
                 style: TextStyle(
                   color: Colors.pink,
                   fontSize: 20,
@@ -83,16 +99,17 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
-                padding: EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  color: Colors.pinkAccent,
+                  color: Colors.blue,
+                  border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: const Center(
                   child: Text(
-                    'click me',
+                    'Login',
                     style: TextStyle(
-                      color: Colors.tealAccent,
+                      color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,14 +120,14 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
               Text(
-                'new bb surfer? ',
+                'New to B-surf? ',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                 ),
               ),
               Text(
-                'sign up',
+                'Sign up',
                 style: TextStyle(
                   color: Colors.pink,
                   fontSize: 20,
@@ -118,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ]),
+            const SizedBox(height: 10),
           ]),
         ),
       ),
