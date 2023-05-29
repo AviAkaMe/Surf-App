@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "871763687694",
+    "project_id": "b-surf",
+    "storage_bucket": "b-surf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871763687694:android:fe7fec7c4015c492577f5f",
+        "android_client_info": {
+          "package_name": "com.Avshalom_Shoval.b_surf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871763687694-41rjkdq9n9qrpkdllha3f1a2uaj9vran.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjPQB1DyqH5Tk90vxOyD4_hRUrejsnQ8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871763687694-41rjkdq9n9qrpkdllha3f1a2uaj9vran.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "871763687694-f222kn4h14h6h57iheh18i7ho7640kt6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bSurf"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
