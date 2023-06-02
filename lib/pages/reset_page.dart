@@ -3,36 +3,58 @@ import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
 
-class LoginPage extends StatefulWidget {
+class ResetPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const ResetPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ResetPage> createState() => _ResetPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPageState extends State<ResetPage> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
+  final confController = TextEditingController();
 
-  void signIn() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passController.text,
+  void signUp() async {
+    if (passController.text != confController.text) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Password Mismatch'),
+            content: Text(
+                'The passwords you entered do not match. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      errorMessage(e.code);
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passController.text,
+        );
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        errorMessage(e.code);
+      }
     }
   }
 
@@ -67,16 +89,14 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                      height: 150,
-                      child: Image.asset('lib/images/BB.png'),
+                    Text(
+                      'Welcome to reset! ',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 30,
+                      ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-                      child: Image.asset('lib/images/BBB.png'),
-                    ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     TextBox(
                       controller: emailController,
                       hint: ' Email Address',
@@ -89,37 +109,22 @@ class _LoginPageState extends State<LoginPage> {
                       secret: true,
                     ),
                     const SizedBox(height: 10),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(
-                        'Forgot your password? ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          'Reset',
-                          style: TextStyle(
-                            color: Colors.pink,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ]),
+                    TextBox(
+                      controller: confController,
+                      hint: ' Confirm Password',
+                      secret: true,
+                    ),
                     const SizedBox(height: 10),
                     Button(
-                      text: 'Sign-In',
-                      onTap: signIn,
+                      text: 'Sign-Up',
+                      onTap: signUp,
                     ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'New to B-surf? ',
+                          'Already have an account? ',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -129,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         GestureDetector(
                           onTap: widget.onTap,
                           child: const Text(
-                            'Sign up',
+                            'Login Now',
                             style: TextStyle(
                               color: Colors.pink,
                               fontSize: 20,
