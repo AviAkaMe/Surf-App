@@ -9,9 +9,10 @@ class LoginOrSignupPage extends StatefulWidget {
   State<LoginOrSignupPage> createState() => _LoginOrSignupPageState();
 }
 
+//this is a test
+
 class _LoginOrSignupPageState extends State<LoginOrSignupPage> {
   bool showLoginPage = true;
-  @override
   void togglePages() {
     setState(() {
       showLoginPage = !showLoginPage;
