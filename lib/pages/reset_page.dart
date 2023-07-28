@@ -1,11 +1,11 @@
+import 'package:b_surf/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
 
 class ResetPage extends StatefulWidget {
-  final Function()? onTap;
-  const ResetPage({super.key, required this.onTap});
+  static const String id = 'reset_page';
 
   @override
   State<ResetPage> createState() => _ResetPageState();
@@ -13,48 +13,38 @@ class ResetPage extends StatefulWidget {
 
 class _ResetPageState extends State<ResetPage> {
   final emailController = TextEditingController();
-  final passController = TextEditingController();
-  final confController = TextEditingController();
 
-  void signUp() async {
-    if (passController.text != confController.text) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Password Mismatch'),
-            content: Text(
-                'The passwords you entered do not match. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passController.text,
+  void resetPassword(BuildContext context) async {
+    String email = emailController.text.trim();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(),
         );
-        Navigator.pop(context);
-      } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
-        errorMessage(e.code);
-      }
+      },
+    );
+    if (email.isEmpty) {
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Please enter your email address'),
+              ));
+      return;
+    }
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      Navigator.pop(context);
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(
+                    'a reset password email have been sent to your mailbox'),
+              ));
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context); // Close the CircularProgressIndicator dialog
+      errorMessage(e.code);
     }
   }
 
@@ -103,47 +93,20 @@ class _ResetPageState extends State<ResetPage> {
                       secret: false,
                     ),
                     const SizedBox(height: 10),
-                    TextBox(
-                      controller: passController,
-                      hint: ' Password',
-                      secret: true,
-                    ),
-                    const SizedBox(height: 10),
-                    TextBox(
-                      controller: confController,
-                      hint: ' Confirm Password',
-                      secret: true,
-                    ),
-                    const SizedBox(height: 10),
                     Button(
-                      text: 'Sign-Up',
-                      onTap: signUp,
+                      text: 'Reset-Password',
+                      onTap: () => resetPassword(context),
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account? ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: const Text(
-                            'Login Now',
-                            style: TextStyle(
-                              color: Colors.pink,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, LoginPage.id);
+                      },
+                      child: Text(
+                        'Back to Log-in Page ',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
+                    ),
                   ]),
             ),
           ),

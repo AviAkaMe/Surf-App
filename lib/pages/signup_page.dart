@@ -1,11 +1,12 @@
+import 'package:b_surf/components/func.dart';
+import 'package:b_surf/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
 
 class SignupPage extends StatefulWidget {
-  final Function()? onTap;
-  const SignupPage({super.key, required this.onTap});
+  static const String id = 'signup_page';
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -16,23 +17,33 @@ class _SignupPageState extends State<SignupPage> {
   final passController = TextEditingController();
   final confController = TextEditingController();
 
+  bool isPasswordStrong(String password) {
+    return password.length >= 6 &&
+        password.contains(RegExp(r'[A-Z]')) &&
+        password.contains(RegExp(r'[a-z]')) &&
+        password.contains(RegExp(r'[0-9]'));
+  }
+
   void signUp() async {
     if (passController.text != confController.text) {
       showDialog(
+          context: context,
+          builder: (context) {
+            return Container(
+              child: AlertDialog(
+                title: Text('Password Mismatch'),
+              ),
+            );
+          });
+    } else if (!isPasswordStrong(passController.text)) {
+      showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text('Password Mismatch'),
-            content: Text(
-                'The passwords you entered do not match. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: Text('OK'),
-              ),
-            ],
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                  'The Password needs to be atleast 6 letters length with numbers capital letters and small letters'),
+            ),
           );
         },
       );
@@ -50,25 +61,15 @@ class _SignupPageState extends State<SignupPage> {
           email: emailController.text,
           password: passController.text,
         );
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
-        errorMessage(e.code);
+        errorMessage(context, e.code);
       }
     }
-  }
-
-  void errorMessage(String error) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(error),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -120,30 +121,15 @@ class _SignupPageState extends State<SignupPage> {
                       onTap: signUp,
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account? ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: const Text(
-                            'Login Now',
-                            style: TextStyle(
-                              color: Colors.pink,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, LoginPage.id);
+                      },
+                      child: Text(
+                        'Already have an account? ',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
+                    ),
                   ]),
             ),
           ),

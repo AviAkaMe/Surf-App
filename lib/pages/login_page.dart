@@ -1,11 +1,14 @@
+import 'package:b_surf/components/func.dart';
+import 'package:b_surf/pages/reset_page.dart';
+import 'package:b_surf/pages/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
+import 'nav_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  static const String id = 'login_page';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -30,23 +33,11 @@ class _LoginPageState extends State<LoginPage> {
         password: passController.text,
       );
       Navigator.pop(context);
+      Navigator.pushNamed(context, NavPage.id);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      errorMessage(e.code);
+      Navigator.pop(context); // Close the CircularProgressIndicator dialog
+      errorMessage(context, e.code);
     }
-  }
-
-  void errorMessage(String error) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(error),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -89,56 +80,30 @@ class _LoginPageState extends State<LoginPage> {
                       secret: true,
                     ),
                     const SizedBox(height: 10),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(
-                        'Forgot your password? ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, ResetPage.id);
+                      },
+                      child: Text(
+                        'Forgot your password?',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
                       ),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          'Reset',
-                          style: TextStyle(
-                            color: Colors.pink,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ]),
+                    ),
                     const SizedBox(height: 10),
                     Button(
                       text: 'Sign-In',
                       onTap: signIn,
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'New to B-surf? ',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: const Text(
-                            'Sign up',
-                            style: TextStyle(
-                              color: Colors.pink,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, SignupPage.id);
+                      },
+                      child: Text(
+                        'New to B-surf? ',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
+                    ),
                   ]),
             ),
           ),
