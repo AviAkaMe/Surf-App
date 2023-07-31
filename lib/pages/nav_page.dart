@@ -1,74 +1,3 @@
-// import 'package:b_surf/pages/school_page.dart';
-// import 'package:b_surf/pages/spots_page.dart';
-// import 'package:b_surf/pages/wind_page.dart';
-// import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-// import 'package:flutter/material.dart';
-// import 'home_page.dart';
-// import 'kite_page.dart';
-//
-// class NavPage extends StatefulWidget {
-//   static const String id = 'nav_page';
-//
-//   @override
-//   _NavPageState createState() => _NavPageState();
-// }
-//
-// class _NavPageState extends State<NavPage> {
-//   int _currentIndex = 2;
-//
-//   final List<Widget> _pages = [
-//     WindPage(),
-//     KitePage(),
-//     HomePage(),
-//     SpotsPage(),
-//     SchoolPage(),
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           Container(
-//             decoration: const BoxDecoration(
-//               gradient: LinearGradient(
-//                 begin: Alignment.topLeft,
-//                 end: Alignment.bottomRight,
-//                 colors: [Colors.blue, Colors.white],
-//               ),
-//             ),
-//             child: Center(
-//               child: _pages[_currentIndex],
-//             ),
-//           ),
-//           Positioned(
-//             left: 0,
-//             right: 0,
-//             bottom: 0,
-//             child: CurvedNavigationBar(
-//               color: Colors.white38,
-//               backgroundColor: Colors.transparent,
-//               index: _currentIndex,
-//               onTap: (index) {
-//                 setState(() {
-//                   _currentIndex = index;
-//                 });
-//               },
-//               items: [
-//                 Icon(Icons.wind_power, size: 30),
-//                 Icon(Icons.kitesurfing, size: 30),
-//                 Icon(Icons.home, size: 30),
-//                 Icon(Icons.beach_access, size: 30),
-//                 Icon(Icons.school, size: 30),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:b_surf/pages/school_page.dart';
 import 'package:b_surf/pages/settings_page.dart';
 import 'package:b_surf/pages/spots_page.dart';
@@ -108,7 +37,7 @@ class _NavPageState extends State<NavPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Your App Title"), // Add your app title here
+        title: Text('B - S u r f'),
         leading: IconButton(
           icon: Icon(Icons.menu),
           onPressed: _openDrawer,
@@ -125,7 +54,6 @@ class _NavPageState extends State<NavPage> {
             ),
           ),
         ),
-        // Add any other properties you want for the AppBar
       ),
       drawer: Drawer(
         // Add your drawer content here

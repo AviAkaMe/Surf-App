@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'info_page.dart';
+
 class HomePage extends StatelessWidget {
   static const String id = 'home_page';
 
@@ -8,26 +10,52 @@ class HomePage extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Colors.blue, Colors.white],
+        ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            width: 50,
-            child: Text(''' General information about the field of kite surfing:
- Kitesurfing \ KiteSurfing is an extreme marine sport,
- where the surfer is connected to a large kite and generates power with the help of the wind,
- which is used for surfing on the water using a special surfboard.
- It is one of the most developed water sports today.
- The surfer generates gravity with the help of the kite which is attached to the surfer's body
- using a special harness called a trapeze.
- Kite surfing is considered a relatively easy sport from a physical point of view
- Since the control of the kite is technical and does not require much effort.
- The technique is acquired in the Kite Surfing course which is taught in addition to the theory
- and safety instructions also the correct control of the kite.'''),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  height: 150,
+                  child: Image.asset('lib/images/BBB.png'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25), // Adjust the horizontal space here
+                  child: Text(
+                    '''
+קייט סרפינג הוא ספורט אקסטרים ימי שבו הגולש מחובר לעפיפון גדול ומייצר כוח בעזרת הרוח מדובר באחד מענפי הספורט הימי המפותחים ביותר כיום
+קייט סרפינג נחשב לספורט קל יחסית מבחינה פיזית מאחר והשליטה בעפיפון היא טכנית ולא דורשת מאמץ רב
+את הטכניקה רוכשים בקורס קייט סרפינג אשר מלמד בנוסף לתאוריה והוראות בטיחות גם את השליטה הנכונה בקייט''',
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, InfoPage.id);
+                  },
+                  child: Text(
+                    'למידע נוסף וסרטונים לחץ כאן',
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,26 +1,28 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class InfoPage extends StatelessWidget {
   static const String id = 'info_page';
 
-  void singUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: singUserOut,
-            icon: Icon(Icons.logout),
-          )
-        ],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue, Colors.white]),
       ),
-      body: const Center(
-        child: Text('info page'),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'A B O U T',
+          ),
+          backgroundColor: Colors.white70,
+        ),
+        backgroundColor: Colors.transparent,
+        body: const Center(
+          child: Text('Info page'),
+        ),
       ),
     );
   }
