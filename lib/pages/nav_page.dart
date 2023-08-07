@@ -6,6 +6,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'info_page.dart';
 import 'kite_page.dart';
 import 'login_page.dart';
 
@@ -90,7 +91,7 @@ class _NavPageState extends State<NavPage> {
                 ),
                 leading: Icon(Icons.info),
                 onTap: () {
-                  Navigator.pushNamed(context, SettingsPage.id);
+                  Navigator.pushNamed(context, InfoPage.id);
                 },
               ),
               ListTile(

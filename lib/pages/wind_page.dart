@@ -53,12 +53,12 @@ class _WindPageState extends State<WindPage> {
             children: [
               Icon(
                 Icons.wind_power,
-                size: 150,
+                size: 125,
                 color: Colors.black,
               ),
               SizedBox(height: 30),
               Text(
-                'Please select your weight: ',
+                'Please select Max Drive Time: ',
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
@@ -106,6 +106,13 @@ class _WindPageState extends State<WindPage> {
                       TextStyle(fontSize: 20), // Adjust the font size if needed
                 ),
               ),
+              SizedBox(height: 20),
+              Container(
+                width: 350,
+                height: 125,
+                color: Colors.deepOrange,
+              ),
+              SizedBox(height: 20),
             ],
           ),
         ),
