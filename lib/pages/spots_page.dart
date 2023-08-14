@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../components/func.dart';
 
 class SpotsPage extends StatelessWidget {
@@ -49,14 +47,12 @@ class SpotsPage extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => openGoogleMaps(33.08038895775843,
-                      35.10583652247726), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_betset'),
                   child: Container(
-                    width: 325, // Set the desired width
-                    height: 175, // Set the desired height
+                    width: 325,
+                    height: 175,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          10), // Set the desired border radius
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
@@ -93,8 +89,7 @@ class SpotsPage extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.842513397044016,
-                      35.058074448873256), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_krayot'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -141,8 +136,7 @@ class SpotsPage extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.835332450725446,
-                      34.97939554809656), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_batGalim'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -185,8 +179,7 @@ class SpotsPage extends StatelessWidget {
                                   ))
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.785592421259274,
-                      34.95466699709856), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_studentBeach'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -229,8 +222,7 @@ class SpotsPage extends StatelessWidget {
                                   ))
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.70820655373358,
-                      34.940949995628266), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_atlit'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -267,8 +259,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.67912023083055,
-                      34.9285194001394), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_neveYam'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -310,8 +301,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.57996870708034,
-                      34.913364512543524), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_maayanTzvi'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -353,8 +343,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.49134721856736,
-                      34.88867613669563), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_sdotYam'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -396,8 +385,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.3873374340533,
-                      34.86341053821142), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_beitYanai'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -439,8 +427,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.27317404977574,
-                      34.832890461196634), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_poleg'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -477,8 +464,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.16983071870699,
-                      34.798568690029846), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_herzliya'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -521,8 +507,7 @@ class SpotsPage extends StatelessWidget {
                                       fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.07200880831171,
-                      34.76363199651304), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_geula'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -559,8 +544,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.00649572651075,
-                      34.73436426969297), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_batYam'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -597,8 +581,7 @@ class SpotsPage extends StatelessWidget {
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]))),
                 InkWell(
-                  onTap: () => openGoogleMaps(29.513293413514184,
-                      34.92633324054436), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_eilat'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -617,26 +600,27 @@ class SpotsPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Container(
-                    padding: EdgeInsets.all(15),
-                    child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black, fontSize: 20),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: "\n סיני",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text:
-                                      "\n סיני הינו ספוט מאוד מומלץ גם למתחילים.בסיני יש שני ספוטים מרכזיים הראשון בדאב והשני בבלו לגין.הספוט בדהב הינו לגונה היושבת בצמוד למלון טירנה למתחילים יש את הלגונה, הלגונה עובדת משעות הבוקר המוקדמות ועד השעה אחת בצהריים כיין שיש שפל, ולאנשים מקצועיים יותר שיודעים כבר לחדד אפשר לצאת לים הפתוח שצמוד ללגונה . ישנם שלושה בתי ספר של קייט גם השכרת ציוד(מתחילים לא יכולים להשכיר ציוד) שימו לב מתחילים- נא לא לצאת לים הפתוח,אין סירות חילוץ! הבלו לאגון לעומת זה עובד מהשעות המוקדמות של הבוקר כל היום, .\n",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ]))),
+                  padding: EdgeInsets.all(15),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "\n סיני",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text:
+                                "\n סיני הינו ספוט מאוד מומלץ גם למתחילים.בסיני יש שני ספוטים מרכזיים הראשון בדאב והשני בבלו לגין.הספוט בדהב הינו לגונה היושבת בצמוד למלון טירנה למתחילים יש את הלגונה, הלגונה עובדת משעות הבוקר המוקדמות ועד השעה אחת בצהריים כיין שיש שפל, ולאנשים מקצועיים יותר שיודעים כבר לחדד אפשר לצאת לים הפתוח שצמוד ללגונה . ישנם שלושה בתי ספר של קייט גם השכרת ציוד(מתחילים לא יכולים להשכיר ציוד) שימו לב מתחילים- נא לא לצאת לים הפתוח,אין סירות חילוץ! הבלו לאגון לעומת זה עובד מהשעות המוקדמות של הבוקר כל היום, .\n",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
                 InkWell(
-                  onTap: () => openGoogleMaps(29.513293413514184,
-                      34.92633324054436), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_dahab'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -647,7 +631,26 @@ class SpotsPage extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'lib/images/eilatSpot.jpg',
+                        'lib/images/dahabSpot.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                InkWell(
+                  onTap: () => locate('locations', 'Spot_sinai'),
+                  child: Container(
+                    width: 325, // Set the desired width
+                    height: 175, // Set the desired height
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          10), // Set the desired border radius
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/blueSpot.jpg',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -655,26 +658,27 @@ class SpotsPage extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Container(
-                    padding: EdgeInsets.all(15),
-                    child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black, fontSize: 20),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: "\n כנרת-דיאמונד",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      fontWeight: FontWeight.bold)),
-                              TextSpan(
-                                  text:
-                                      "\n הוא נמצא בחלק המזרחי של הכנרת והכניסה היא דרך מלון סטאי החדש, הכנרת עובדת מסוף מאי ועד תחילת ספטמבר עם רוח דרום-מערבית/מערבית שנכנסת בשעות הצהריים. מדובר בספוט שיכול להיות די מסוכן. אין כאן חול, הכל אבנים וסלעים גם בחוף וגם בתוך המים. כל תקלה ותאונה יכולה להגמר אחרת לגמרי מחופים פתוחים וחוליים כמו שיש בים התיכון. \n",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ]))),
+                  padding: EdgeInsets.all(15),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "\n כנרת-דיאמונד",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text:
+                                "\n הוא נמצא בחלק המזרחי של הכנרת והכניסה היא דרך מלון סטאי החדש, הכנרת עובדת מסוף מאי ועד תחילת ספטמבר עם רוח דרום-מערבית/מערבית שנכנסת בשעות הצהריים. מדובר בספוט שיכול להיות די מסוכן. אין כאן חול, הכל אבנים וסלעים גם בחוף וגם בתוך המים. כל תקלה ותאונה יכולה להגמר אחרת לגמרי מחופים פתוחים וחוליים כמו שיש בים התיכון. \n",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
                 InkWell(
-                  onTap: () => openGoogleMaps(32.83597507284048,
-                      35.642505441423886), // Set your desired coordinates
+                  onTap: () => locate('locations', 'Spot_seaofGalilee'),
                   child: Container(
                     width: 325, // Set the desired width
                     height: 175, // Set the desired height
@@ -691,7 +695,7 @@ class SpotsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 20),
               ],
             ),
           ),

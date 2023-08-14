@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/func.dart';
@@ -28,8 +29,7 @@ class _SchoolPage extends State<SchoolPage> {
             child: Column(
               children: [
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_extremeEilat'),
                   child: Container(
                     height: 200,
                     width: 300,
@@ -49,20 +49,49 @@ class _SchoolPage extends State<SchoolPage> {
                             text: 'אקסטרים - האחים אסא  \n',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         TextSpan(
-                            text: 'מיקום: בית ינאי, אילת  \n',
+                            text: 'מיקום: אילת  \n',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         TextSpan(
-                            text: 'אזורי לימוד: בית ינאי, אילת  \n',
+                            text: 'אזורי לימוד: אילת  \n',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '1700555170'),
+                InkWell(
+                  onTap: () => locate('schools', 'school_extremeBeitYanai'),
+                  child: Container(
+                    height: 200,
+                    width: 300,
+                    child: Image.asset(
+                      'lib/images/asabro.jpeg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Container(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'אקסטרים - האחים אסא  \n',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: 'מיקום: בית ינאי  \n',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: 'אזורי לימוד: בית ינאי  \n',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
+                FetchPhone(schoolId: 'school_extremeBeitYanai'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_surfCenter'),
                   child: Container(
                     height: 100,
                     width: 300,
@@ -89,11 +118,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '086371602'),
+                FetchPhone(schoolId: 'school_surfCenter'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_sunShine'),
                   child: Container(
                     height: 200,
                     width: 300,
@@ -122,11 +150,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0525526111'),
+                FetchPhone(schoolId: 'school_sunShine'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_iks'),
                   child: Container(
                     height: 200,
                     width: 300,
@@ -155,9 +182,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0506544450'),
+                FetchPhone(schoolId: 'school_iks'),
                 SizedBox(height: 30),
                 InkWell(
+                  onTap: () => locate('schools', 'school_kiteLab'),
                   child: Container(
                     height: 200,
                     width: 300,
@@ -187,11 +215,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '097733894'),
+                FetchPhone(schoolId: 'school_kiteLab'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_surfShack'),
                   child: Container(
                     height: 200,
                     width: 300,
@@ -220,11 +247,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0547438295'),
+                FetchPhone(schoolId: 'school_surfShack'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_kiteSurf'),
                   child: Container(
                     height: 100,
                     width: 300,
@@ -253,11 +279,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0515860870'),
+                FetchPhone(schoolId: 'school_kiteSurf'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_core'),
                   child: Container(
                     height: 100,
                     width: 300,
@@ -287,11 +312,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0522865997'),
+                FetchPhone(schoolId: 'school_core'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_freeGull'),
                   child: Container(
                     height: 100,
                     width: 300,
@@ -320,11 +344,10 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0757012930'),
+                FetchPhone(schoolId: 'school_freeGull'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () =>
-                      openGoogleMaps(32.16983071870699, 34.798568690029846),
+                  onTap: () => locate('schools', 'school_myPoint'),
                   child: Container(
                     height: 100,
                     width: 300,
@@ -353,7 +376,7 @@ class _SchoolPage extends State<SchoolPage> {
                     ),
                   ),
                 ),
-                CallButton(phoneNumber: '0524856419'),
+                FetchPhone(schoolId: 'school_myPoint'),
                 SizedBox(height: 100),
               ],
             ),
@@ -384,5 +407,32 @@ class CallButton extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
+  }
+}
+
+class FetchPhone extends StatelessWidget {
+  final String
+      schoolId; // Assuming you have a unique identifier for each school
+
+  FetchPhone({required this.schoolId});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('schools')
+          .doc(schoolId)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(); // Loading indicator while fetching data
+        }
+
+        // Assuming your document structure has a field called 'phoneNumber'
+        final phone = snapshot.data?['phone'];
+
+        return CallButton(phoneNumber: phone);
+      },
+    );
   }
 }
