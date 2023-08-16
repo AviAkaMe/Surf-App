@@ -1,10 +1,10 @@
 import 'package:b_surf/components/func.dart';
 import 'package:b_surf/pages/login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
   static const String id = 'signup_page';
@@ -57,11 +57,36 @@ class _SignupPageState extends State<SignupPage> {
           );
         },
       );
+      //     try {
+      //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      //         email: emailController.text,
+      //         password: passController.text,
+      //       );
+      //
+      //       Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => LoginPage()),
+      //       );
+      //     } on FirebaseAuthException catch (e) {
+      //       Navigator.pop(context);
+      //       errorMessage(context, e.code);
+      //     }
+      //   }
+      // }
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passController.text,
         );
+
+        // Create a user document in the "users" collection
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'favoriteSpot': 'none', // Initialize with null or empty
+        });
 
         Navigator.pushReplacement(
           context,
