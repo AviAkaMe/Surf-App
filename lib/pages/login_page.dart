@@ -32,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passController.text,
       );
+
       Navigator.pop(context);
       Navigator.pushNamed(context, NavPage.id);
     } on FirebaseAuthException catch (e) {

@@ -57,22 +57,6 @@ class _SignupPageState extends State<SignupPage> {
           );
         },
       );
-      //     try {
-      //       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      //         email: emailController.text,
-      //         password: passController.text,
-      //       );
-      //
-      //       Navigator.pushReplacement(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => LoginPage()),
-      //       );
-      //     } on FirebaseAuthException catch (e) {
-      //       Navigator.pop(context);
-      //       errorMessage(context, e.code);
-      //     }
-      //   }
-      // }
       try {
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -80,12 +64,15 @@ class _SignupPageState extends State<SignupPage> {
           password: passController.text,
         );
 
+        //String? deviceToken = await _firebaseMessaging.getToken();
+
         // Create a user document in the "users" collection
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)
             .set({
           'favoriteSpot': 'none', // Initialize with null or empty
+          'deviceToken': 'none', // Initialize the device token
         });
 
         Navigator.pushReplacement(

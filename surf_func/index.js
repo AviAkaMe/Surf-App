@@ -7,57 +7,100 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
-
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const axios = require('axios');
 
 admin.initializeApp();
 const db = admin.firestore();
+const fcm = admin.messaging();
 
-exports.checkWindSpeed = functions.pubsub.schedule('0 7 * * *')
-    .timeZone('Asia/Jerusalem')
-    .onRun(async (context) => {
+exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
+    try {
         const locationsRef = db.collection('locations');
         const locationsSnapshot = await locationsRef.get();
 
-        const spotsWithStrongWinds = [];
-
-        const currentTime = new Date();
-        const currentTimeInMS = currentTime.getTime();
-        const startOfDayMS = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 8, 0, 0).getTime();
-        const endOfDayMS = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(), 20, 0, 0).getTime();
+        const spotsWithStrongWinds = {};
 
         const promises = locationsSnapshot.docs.map(async (doc) => {
             const locationData = doc.data();
             const coords = locationData.cords;
 
-            const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${coords.latitude}&lon=${coords.longitude}&appid=f4f0243abc274ba4138270c5b30f7b21`);
-            const windSpeedData = response.data.list.filter(item => {
-                const itemTime = item.dt * 1000;
-                return itemTime >= startOfDayMS && itemTime <= endOfDayMS && item.wind.speed >= 15;
-            });
+            const latitude = parseFloat(coords.latitude); // Convert to float
+            const longitude = parseFloat(coords.longitude); // Convert to float
 
-            if (windSpeedData.length > 0) {
-                windSpeedData.forEach(item => {
-                    if (item.wind.speed >= 15) {
-                        const windStartTime = new Date(item.dt * 1000);
-                        spotsWithStrongWinds.push({
-                            name: locationData.name,
-                            windStartTime: windStartTime.toISOString() // Convert to ISO string for logging
-                        });
-                    }
-                });
+            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&forecast_days=1`);
+
+            const hourlyData = response.data.hourly;
+
+            const relevantHourlyData = hourlyData.time.slice(11); // Ignore the first 11 results
+            const relevantWindspeedData = hourlyData.windspeed_10m.slice(11);
+
+            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 10);
+
+            if (earliestIndex !== -1) {
+                const earliestTime = new Date(relevantHourlyData[earliestIndex]);
+                if (!spotsWithStrongWinds[locationData.name] || earliestTime < spotsWithStrongWinds[locationData.name]) {
+                    spotsWithStrongWinds[locationData.name] = earliestTime;
+                }
             }
         });
 
         await Promise.all(promises);
 
-        console.log('Spots with strong winds:', spotsWithStrongWinds);
+        const spotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
+            name,
+            windStartTime: spotsWithStrongWinds[name].toISOString()
+        }));
 
-        return null;
+        console.log('Spots with strong winds:', spotsWithStrongWindsArray);
+
+        response.status(200).json({ spotsWithStrongWinds: spotsWithStrongWindsArray });
+    } catch (error) {
+        console.error('Error:', error);
+        response.status(500).send('An error occurred');
+    }
+});
+
+exports.scheduledAlerts = functions.pubsub.schedule('20 18 * * *')
+    .timeZone('Asia/Jerusalem') // Israel timezone
+    .onRun(async (context) => {
+        try {
+            const strongWindsResponse = await axios.get('https://us-central1-b-surf.cloudfunctions.net/getStrongWinds');
+
+            const spotsWithStrongWindsArray = strongWindsResponse.data.spotsWithStrongWinds;
+
+            const usersRef = db.collection('users');
+            const usersSnapshot = await usersRef.get();
+
+            const promises = usersSnapshot.docs.map(async (doc) => {
+                const userData = doc.data();
+                if (userData.favoriteSpot && spotsWithStrongWindsArray.some(spot => spot.name === userData.favoriteSpot)) {
+                    const userDeviceToken = userData.deviceToken; // Assuming you have a device token field
+                    if (userDeviceToken) {
+                        const windStartTime = spotsWithStrongWindsArray.find(spot => spot.name === userData.favoriteSpot).windStartTime;
+                        const formattedWindStartTime = new Date(windStartTime).toISOString().substr(11, 5);
+
+                        const message = {
+                            token: userDeviceToken,
+                            notification: {
+                                title: 'Strong Winds Alert',
+                                body: `Strong winds are expected at ${formattedWindStartTime}.`
+                            }
+                        };
+
+                        await fcm.send(message);
+                    }
+                }
+            });
+
+            await Promise.all(promises);
+
+            return null;
+        } catch (error) {
+            console.error('Error:', error);
+            return null;
+        }
     });
 
 // Create and deploy your first functions
