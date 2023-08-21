@@ -776,30 +776,85 @@ class _SpotsPageState extends State<SpotsPage> {
   //   );
   // }
 
-  Positioned buildFavoriteButton(String buttonName) {
+  // Positioned buildFavoriteButton(String buttonName) {
+  //   return Positioned(
+  //     top: 0,
+  //     right: 0,
+  //     child: InkWell(
+  //       onTap: () async {
+  //         final FirebaseMessaging _firebaseMessaging =
+  //             FirebaseMessaging.instance;
+  //         String? deviceToken = await _firebaseMessaging.getToken();
+  //
+  //         if (isButtonFavorite(buttonName)) {
+  //           await FirebaseFirestore.instance
+  //               .collection('users')
+  //               .doc(loggedInUser!.uid)
+  //               .update({'favoriteSpot': 'none', 'deviceToken': deviceToken});
+  //         } else {
+  //           await FirebaseFirestore.instance
+  //               .collection('users')
+  //               .doc(loggedInUser!.uid)
+  //               .update(
+  //                   {'favoriteSpot': buttonName, 'deviceToken': deviceToken});
+  //         }
+  //
+  //         await fetchUserFavoriteSpot();
+  //       },
+  //       child: Container(
+  //         width: 50,
+  //         height: 50,
+  //         decoration: BoxDecoration(
+  //           color: Colors.transparent,
+  //         ),
+  //         child: Icon(
+  //           Icons.favorite,
+  //           color: isButtonFavorite(buttonName) ? Colors.red : Colors.blueGrey,
+  //           size: 40,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Positioned buildFavoriteButton(String buttonName, BuildContext context) {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
     return Positioned(
       top: 0,
       right: 0,
       child: InkWell(
         onTap: () async {
-          final FirebaseMessaging _firebaseMessaging =
-              FirebaseMessaging.instance;
-          String? deviceToken = await _firebaseMessaging.getToken();
+          // Request permission for FCM notifications
+          NotificationSettings settings =
+              await _firebaseMessaging.requestPermission(
+            announcement:
+                true, // Optional: Set to true if you want to receive critical alerts
+          );
 
-          if (isButtonFavorite(buttonName)) {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(loggedInUser!.uid)
-                .update({'favoriteSpot': 'none', 'deviceToken': deviceToken});
+          if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+            print('Notification permission granted');
+
+            // Continue with your favorite button logic
+            String? deviceToken = await _firebaseMessaging.getToken();
+
+            if (isButtonFavorite(buttonName)) {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(loggedInUser!.uid)
+                  .update({'favoriteSpot': 'none', 'deviceToken': 'none'});
+            } else {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(loggedInUser!.uid)
+                  .update(
+                      {'favoriteSpot': buttonName, 'deviceToken': deviceToken});
+            }
+
+            await fetchUserFavoriteSpot();
           } else {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(loggedInUser!.uid)
-                .update(
-                    {'favoriteSpot': buttonName, 'deviceToken': deviceToken});
+            print('Notification permission denied');
           }
-
-          await fetchUserFavoriteSpot();
         },
         child: Container(
           width: 50,
@@ -886,7 +941,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('betset'), // Reuse the function here
+                    buildFavoriteButton(
+                        'betset', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -933,7 +989,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('krayot'), // Reuse the function here
+                    buildFavoriteButton(
+                        'krayot', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -984,7 +1041,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('batGalim'), // Reuse the function here
+                    buildFavoriteButton(
+                        'batGalim', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1034,7 +1092,7 @@ class _SpotsPageState extends State<SpotsPage> {
                       ),
                     ),
                     buildFavoriteButton(
-                        'studentBeach'), // Reuse the function here
+                        'studentBeach', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1084,7 +1142,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('atlit'), // Reuse the function here
+                    buildFavoriteButton(
+                        'atlit', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1128,7 +1187,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('nevaYam'), // Reuse the function here
+                    buildFavoriteButton(
+                        'nevaYam', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1177,7 +1237,7 @@ class _SpotsPageState extends State<SpotsPage> {
                       ),
                     ),
                     buildFavoriteButton(
-                        'maayanTzvi'), // Reuse the function here
+                        'maayanTzvi', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1225,7 +1285,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('sdotYam'), // Reuse the function here
+                    buildFavoriteButton(
+                        'sdotYam', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1273,7 +1334,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('beitYanai'), // Reuse the function here
+                    buildFavoriteButton(
+                        'beitYanai', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1321,7 +1383,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('poleg'), // Reuse the function here
+                    buildFavoriteButton(
+                        'poleg', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1365,7 +1428,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('herzliya'), // Reuse the function here
+                    buildFavoriteButton(
+                        'herzliya', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1414,7 +1478,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('geula'), // Reuse the function here
+                    buildFavoriteButton(
+                        'geula', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1458,7 +1523,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('batYam'), // Reuse the function here
+                    buildFavoriteButton(
+                        'batYam', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1502,7 +1568,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('eilat'), // Reuse the function here
+                    buildFavoriteButton(
+                        'eilat', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1545,7 +1612,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('dahab'), // Reuse the function here
+                    buildFavoriteButton(
+                        'dahab', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1568,7 +1636,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         ),
                       ),
                     ),
-                    buildFavoriteButton('sinai'), // Reuse the function here
+                    buildFavoriteButton(
+                        'sinai', context), // Reuse the function here
                   ],
                 ),
               ),
@@ -1612,7 +1681,7 @@ class _SpotsPageState extends State<SpotsPage> {
                       ),
                     ),
                     buildFavoriteButton(
-                        'seaofGalilee'), // Reuse the function here
+                        'seaofGalilee', context), // Reuse the function here
                   ],
                 ),
               ),

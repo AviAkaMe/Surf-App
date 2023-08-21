@@ -62,7 +62,7 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
     }
 });
 
-exports.scheduledAlerts = functions.pubsub.schedule('20 18 * * *')
+exports.scheduledAlerts = functions.pubsub.schedule('00 10 * * *')
     .timeZone('Asia/Jerusalem') // Israel timezone
     .onRun(async (context) => {
         try {
