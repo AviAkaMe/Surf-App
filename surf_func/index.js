@@ -33,8 +33,8 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
 
             const hourlyData = response.data.hourly;
 
-            const relevantHourlyData = hourlyData.time.slice(11); // Ignore the first 11 results
-            const relevantWindspeedData = hourlyData.windspeed_10m.slice(11);
+            const relevantHourlyData = hourlyData.time.slice(5, 5 + 9); // Ignore the first 5 results
+            const relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 9); // Include next 9 results
 
             const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 10);
 
@@ -62,7 +62,7 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
     }
 });
 
-exports.scheduledAlerts = functions.pubsub.schedule('00 10 * * *')
+exports.scheduledAlerts = functions.pubsub.schedule('0 10 * * *')
     .timeZone('Asia/Jerusalem') // Israel timezone
     .onRun(async (context) => {
         try {
@@ -79,13 +79,16 @@ exports.scheduledAlerts = functions.pubsub.schedule('00 10 * * *')
                     const userDeviceToken = userData.deviceToken; // Assuming you have a device token field
                     if (userDeviceToken) {
                         const windStartTime = spotsWithStrongWindsArray.find(spot => spot.name === userData.favoriteSpot).windStartTime;
-                        const formattedWindStartTime = new Date(windStartTime).toISOString().substr(11, 5);
+
+                        const modifiedWindStartTime = new Date(windStartTime);
+                        modifiedWindStartTime.setHours(modifiedWindStartTime.getHours() + 3);
+                        const formattedWindStartTime = modifiedWindStartTime.toISOString().substr(11, 5);
 
                         const message = {
                             token: userDeviceToken,
                             notification: {
-                                title: 'Strong Winds Alert',
-                                body: `Strong winds are expected at ${formattedWindStartTime}.`
+                                title: 'KiteSurf Winds Alert',
+                                body: `Wake up! winds at your favorite spot are expected at ${formattedWindStartTime}.`
                             }
                         };
 

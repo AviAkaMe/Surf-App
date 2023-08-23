@@ -835,15 +835,13 @@ class _SpotsPageState extends State<SpotsPage> {
           if (settings.authorizationStatus == AuthorizationStatus.authorized) {
             print('Notification permission granted');
 
-            // Continue with your favorite button logic
-            String? deviceToken = await _firebaseMessaging.getToken();
-
             if (isButtonFavorite(buttonName)) {
               await FirebaseFirestore.instance
                   .collection('users')
                   .doc(loggedInUser!.uid)
                   .update({'favoriteSpot': 'none', 'deviceToken': 'none'});
             } else {
+              String? deviceToken = await _firebaseMessaging.getToken();
               await FirebaseFirestore.instance
                   .collection('users')
                   .doc(loggedInUser!.uid)
