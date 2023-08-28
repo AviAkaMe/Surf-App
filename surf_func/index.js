@@ -6,14 +6,23 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
-exports.getHelloLines = functions.https.onRequest((request, response) => {
-  const value = request.query.value || '0:30'; // Default value if none provided
-  const lines = Array(15).fill(`Selected value: ${value}`);
-  response.send(lines);
+exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
+  const value = request.query.value || '0:30';
+  const latitude = request.query.latitude || 'unknown';
+  const longitude = request.query.longitude || 'unknown';
+
+  const lines = [
+    `Selected time: ${value}`,
+    `Latitude: ${latitude}`,
+    `Longitude: ${longitude}`,
+  ];
+
+  response.send(JSON.stringify(lines));
 });
 
 exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
     try {
+        const { date } = request.query; // Get the date parameter from the query string
         const locationsRef = db.collection('locations');
         const locationsSnapshot = await locationsRef.get();
 
@@ -26,7 +35,8 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
             const latitude = parseFloat(coords.latitude); // Convert to float
             const longitude = parseFloat(coords.longitude); // Convert to float
 
-            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&forecast_days=1`);
+            const formattedDate = date || new Date().toISOString().substr(0, 10); // Use the provided date or default to today's date
+            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&start_date=${formattedDate}&end_date=${formattedDate}`);
 
             const hourlyData = response.data.hourly;
 
@@ -59,7 +69,7 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
     }
 });
 
-exports.scheduledAlerts = functions.pubsub.schedule('55 16 * * *')
+exports.scheduledAlerts = functions.pubsub.schedule('10 15 * * *')
     .timeZone('Asia/Jerusalem') // Israel timezone
     .onRun(async (context) => {
         try {
