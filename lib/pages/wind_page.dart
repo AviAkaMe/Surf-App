@@ -168,7 +168,7 @@ class _WindPageState extends State<WindPage> {
                         .toList(),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 100),
               ],
             ),
           ),
