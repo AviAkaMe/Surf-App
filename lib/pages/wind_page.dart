@@ -51,15 +51,21 @@ class _WindPageState extends State<WindPage> {
   Future<void> fetchSpotsWind(String url) async {
     final response = await http.get(Uri.parse(url));
 
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
       final List<String> windLines = jsonResponse.cast<String>();
+
+      print("efdsgvdsgbvsgfd:");
+      print(_windLines);
 
       setState(() {
         _windLines = windLines;
       });
     } else {
-      // Handle error
+      print("error fetch");
     }
   }
 

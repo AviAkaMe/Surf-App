@@ -225,6 +225,91 @@ async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
     return lines;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
+    let targetTimeMinutes; // Initialize the variable to store minutes
+    try {
+        const { date, value, latitude, longitude } = request.query;
+        const locationsRef = db.collection('locations');
+        const locationsSnapshot = await locationsRef.get();
+
+        let travelTimes = {};
+                if (value && latitude && longitude) {
+                    const travelTimesResponse = await axios.get(`https://us-central1-b-surf.cloudfunctions.net/calculateTravelTimes?lat=${latitude}&lng=${longitude}`);
+                    travelTimes = travelTimesResponse.data.travelTimes.reduce((acc, spot) => {
+                        acc[spot.name] = spot.durationMinutes;
+                        return acc;
+                    }, {});
+                }
+
+        const spotsWithStrongWinds = {};
+
+        const promises = locationsSnapshot.docs.map(async (doc) => {
+
+            if (value) {
+                const [hours, minutes] = value.split(':').map(Number); // Parse hours and minutes
+                targetTimeMinutes = hours * 60 + minutes; // Calculate total minutes
+            }
+
+            console.log('targetTimeMinutes:', targetTimeMinutes); // Print the value for testing
+
+            const locationData = doc.data();
+            const coords = locationData.cords;
+
+            const latitude = parseFloat(coords.latitude);
+            const longitude = parseFloat(coords.longitude);
+
+            const currentDate = new Date();
+            const formattedDate = date || currentDate.toISOString().substr(0, 10);
+
+            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&start_date=${formattedDate}&end_date=${formattedDate}`);
+
+            const hourlyData = response.data.hourly;
+
+            let relevantHourlyData;
+            let relevantWindspeedData;
+
+            if (formattedDate === currentDate.toISOString().substr(0, 10)) {
+                const currentHour = currentDate.getUTCHours();
+                const startIndex = Math.max(currentHour, 5);
+                const endIndex = Math.max(16 - startIndex, 0);
+                relevantHourlyData = hourlyData.time.slice(startIndex, startIndex + endIndex);
+                relevantWindspeedData = hourlyData.windspeed_10m.slice(startIndex, startIndex + endIndex);
+            } else {
+                relevantHourlyData = hourlyData.time.slice(5, 5 + 11);  // 5:00-15:00utc
+                relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
+            }
+
+            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 5); // speed in knots
+
+            if (earliestIndex !== -1) {
+                const earliestTime = new Date(relevantHourlyData[earliestIndex]);
+                if (!spotsWithStrongWinds[locationData.name] || earliestTime < spotsWithStrongWinds[locationData.name]) {
+                    spotsWithStrongWinds[locationData.name] = earliestTime;
+                }
+            }
+        });
+
+        await Promise.all(promises);
+             let spotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
+                       name,
+                       windStartTime: spotsWithStrongWinds[name].toISOString(),
+                       durationMinutes: travelTimes[name] || null
+                   }));
+
+        const finalResponse = {
+                    spotsWithStrongWinds: spotsWithStrongWindsArray,
+                    travelTimes: travelTimes  // Include travel times in the response
+                };
+
+        response.status(200).json(finalResponse);
+    } catch (error) {
+        console.error('Error:', error);
+        response.status(500).send('An error occurred');
+    }
+});
+
 //exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
 //    try {
 //        const { date, value, latitude, longitude } = request.query;
@@ -234,6 +319,14 @@ async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
 //        const spotsWithStrongWinds = {};
 //
 //        const promises = locationsSnapshot.docs.map(async (doc) => {
+//
+//            let targetTimeMinutes; // Initialize the variable to store minutes
+//            if (value) {
+//                const [hours, minutes] = value.split(':').map(Number); // Parse hours and minutes
+//                targetTimeMinutes = hours * 60 + minutes; // Calculate total minutes
+//            }
+//            console.log('targetTimeMinutes:', targetTimeMinutes); // Print the value for testing
+//
 //            const locationData = doc.data();
 //            const coords = locationData.cords;
 //
@@ -273,16 +366,16 @@ async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
 //
 //        await Promise.all(promises);
 //
-//        const spotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
-//            name,
-//            windStartTime: spotsWithStrongWinds[name].toISOString()
-//        }));
-//
 //        let travelTimes = [];
 //        if (value && latitude && longitude) {
 //            const travelTimesResponse = await axios.get(`https://us-central1-b-surf.cloudfunctions.net/calculateTravelTimes?lat=${latitude}&lng=${longitude}`);
 //            travelTimes = travelTimesResponse.data;
 //        }
+//
+//        const spotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
+//            name,
+//            windStartTime: spotsWithStrongWinds[name].toISOString()
+//        }));
 //
 //        console.log('Spots with strong winds:', spotsWithStrongWindsArray);
 //
@@ -298,200 +391,7 @@ async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
 //    }
 //});
 
-exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
-    try {
-        const { date, value, latitude, longitude } = request.query;
-        const locationsRef = db.collection('locations');
-        const locationsSnapshot = await locationsRef.get();
-
-        const spotsWithStrongWinds = {};
-
-        const promises = locationsSnapshot.docs.map(async (doc) => {
-
-            let targetTimeMinutes; // Initialize the variable to store minutes
-            if (value) {
-                const [hours, minutes] = value.split(':').map(Number); // Parse hours and minutes
-                targetTimeMinutes = hours * 60 + minutes; // Calculate total minutes
-            }
-            console.log('targetTimeMinutes:', targetTimeMinutes); // Print the value for testing
-
-            const locationData = doc.data();
-            const coords = locationData.cords;
-
-            const latitude = parseFloat(coords.latitude);
-            const longitude = parseFloat(coords.longitude);
-
-            const currentDate = new Date();
-            const formattedDate = date || currentDate.toISOString().substr(0, 10);
-
-            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&start_date=${formattedDate}&end_date=${formattedDate}`);
-
-            const hourlyData = response.data.hourly;
-
-            let relevantHourlyData;
-            let relevantWindspeedData;
-
-            if (formattedDate === currentDate.toISOString().substr(0, 10)) {
-                const currentHour = currentDate.getUTCHours();
-                const startIndex = Math.max(currentHour, 5);
-                const endIndex = Math.max(16 - startIndex, 0);
-                relevantHourlyData = hourlyData.time.slice(startIndex, startIndex + endIndex);
-                relevantWindspeedData = hourlyData.windspeed_10m.slice(startIndex, startIndex + endIndex);
-            } else {
-                relevantHourlyData = hourlyData.time.slice(5, 5 + 11);  // 5:00-15:00utc
-                relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
-            }
-
-            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 11); // speed in knots
-
-            if (earliestIndex !== -1) {
-                const earliestTime = new Date(relevantHourlyData[earliestIndex]);
-                if (!spotsWithStrongWinds[locationData.name] || earliestTime < spotsWithStrongWinds[locationData.name]) {
-                    spotsWithStrongWinds[locationData.name] = earliestTime;
-                }
-            }
-        });
-
-        await Promise.all(promises);
-
-        const spotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
-            name,
-            windStartTime: spotsWithStrongWinds[name].toISOString()
-        }));
-
-        let travelTimes = [];
-        if (value && latitude && longitude) {
-            const travelTimesResponse = await axios.get(`https://us-central1-b-surf.cloudfunctions.net/calculateTravelTimes?lat=${latitude}&lng=${longitude}`);
-            travelTimes = travelTimesResponse.data;
-
-        }
-
-        console.log('Spots with strong winds:', spotsWithStrongWindsArray);
-
-        const finalResponse = {
-            spotsWithStrongWinds: spotsWithStrongWindsArray,
-            travelTimes: travelTimes  // Include travel times in the response
-        };
-
-        response.status(200).json(finalResponse);
-    } catch (error) {
-        console.error('Error:', error);
-        response.status(500).send('An error occurred');
-    }
-});
-
-//exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
-//    try {
-//        const { date, value, latitude, longitude } = request.query;
-//
-//        // Fetch locations from Firestore
-//        const locationsRef = db.collection('locations');
-//        const locationsSnapshot = await locationsRef.get();
-//
-//        let travelTimes = [];
-//        if (value && latitude && longitude) {
-//            // Fetch travel times if latitude and longitude are provided
-//            const travelTimesResponse = await axios.get(`https://us-central1-b-surf.cloudfunctions.net/calculateTravelTimes?lat=${latitude}&lng=${longitude}`);
-//            travelTimes = travelTimesResponse.data.travelTimes;
-//        }
-//
-//        const spotsWithStrongWinds = {};
-//
-//        // Loop through each location and fetch relevant data
-//        const promises = locationsSnapshot.docs.map(async (doc, index) => {
-//            const locationData = doc.data();
-//            const coords = locationData.cords;
-//
-//            const locationLatitude = parseFloat(coords.latitude);
-//            const locationLongitude = parseFloat(coords.longitude);
-//
-//            const currentDate = new Date();
-//            const formattedDate = date || currentDate.toISOString().substr(0, 10);
-//
-//            // Fetch weather data from API
-//            const response = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${locationLatitude}&longitude=${locationLongitude}&hourly=windspeed_10m&current_weather=true&windspeed_unit=kn&start_date=${formattedDate}&end_date=${formattedDate}`);
-//            const hourlyData = response.data.hourly;
-//
-//            let relevantHourlyData;
-//            let relevantWindspeedData;
-//
-//            let updatedCurrentHour = currentDate.getUTCHours(); // Create a new variable for updated currentHour
-//            if (formattedDate === currentDate.toISOString().substr(0, 10)) {
-//                // Calculate rounded-up duration and update updatedCurrentHour
-//                const travelTimeForLocation = travelTimes.length > index ? travelTimes[index].duration : 0;
-//                const roundedUpDuration = Math.ceil(travelTimeForLocation);
-//                updatedCurrentHour += roundedUpDuration; // Update the new variable
-//                const startIndex = Math.max(updatedCurrentHour, 5);
-//                const endIndex = Math.max(16 - startIndex, 0);
-//                relevantHourlyData = hourlyData.time.slice(startIndex, startIndex + endIndex);
-//                relevantWindspeedData = hourlyData.windspeed_10m.slice(startIndex, startIndex + endIndex);
-//            } else {
-//                relevantHourlyData = hourlyData.time.slice(5, 5 + 11);  // 5:00-15:00utc
-//                relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
-//            }
-//
-//            // Find earliest index with windspeed greater than or equal to 11 knots
-//            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 5); //speed in knots
-//
-//            // Store data for locations with strong winds
-//            if (earliestIndex !== -1) {
-//                const earliestTime = new Date(relevantHourlyData[earliestIndex]);
-//                if (!spotsWithStrongWinds[locationData.name] || earliestTime < spotsWithStrongWinds[locationData.name]) {
-//                    spotsWithStrongWinds[locationData.name] = {
-//                        windStartTime: earliestTime.toISOString(),
-//                        duration: travelTimes.length > index ? travelTimes[index].duration : 'N/A'
-//                    };
-//                }
-//            }
-//        });
-//
-//        // Wait for all promises to complete
-//        await Promise.all(promises);
-//
-//        const allSpotsWithStrongWindsArray = Object.keys(spotsWithStrongWinds).map(name => ({
-//            name,
-//            windStartTime: spotsWithStrongWinds[name].windStartTime,
-//            duration: spotsWithStrongWinds[name].duration
-//        }));
-//
-//        // Convert the value (7:00) to minutes
-//        const valueParts = value.split(":").map(Number);
-//        const valueInMinutes = valueParts[0] * 60 + valueParts[1];
-//
-//        // Filter out spots with a duration larger than the provided value
-//        const filteredSpotsWithStrongWindsArray = allSpotsWithStrongWindsArray.filter(spot => {
-//            // Convert the duration to minutes
-//            const durationParts = spot.duration.split(" ");
-//            let totalDuration = 0;
-//
-//            for (let i = 0; i < durationParts.length; i += 2) {
-//                const value = Number(durationParts[i]);
-//                const unit = durationParts[i + 1];
-//
-//                if (unit === "hours") {
-//                    totalDuration += value * 60; // Convert hours to minutes
-//                } else if (unit === "mins") {
-//                    totalDuration += value;
-//                }
-//            }
-//
-//            return totalDuration <= valueInMinutes;
-//        });
-//
-//        const finalFilteredResponse = {
-//            filteredSpotsWithStrongWinds: filteredSpotsWithStrongWindsArray
-//        };
-//
-//        // Send only the filtered results in the response
-//        response.status(200).json(finalFilteredResponse);
-//    } catch (error) {
-//        // Handle errors
-//        console.error('Error:', error);
-//        response.status(500).send('An error occurred');
-//    }
-//});
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 exports.scheduledAlerts = functions.pubsub.schedule('0 7 * * *') // have to be before 8am
     //.timeZone('Asia/Jerusalem') // Israel timezone
