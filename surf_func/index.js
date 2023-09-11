@@ -6,12 +6,17 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
-//////////////////////////////////////////////////////////////////////////
-
-exports.calculateTravelTimes = functions.https.onRequest(async (req, res) => {
+/**
+ * Calculate travel times from a user's location to multiple destinations.
+ *
+ * @param {number} lat - The latitude of the user's location.
+ * @param {number} lng - The longitude of the user's location.
+ * @returns {Promise<Object>} An object containing travel times to destinations.
+ * @throws {Error} If an error occurs during the calculation.
+ */
+async function calculateTravelTimes(lat, lng) {
   try {
-    // Get user's origin coordinates from the request
-    const { lat, lng } = req.query;
+    // Get user's origin coordinates from the function parameters
     const userCoords = `${lat},${lng}`;
 
     // Fetch destination locations from Firestore
@@ -64,24 +69,37 @@ exports.calculateTravelTimes = functions.https.onRequest(async (req, res) => {
         };
       });
 
-      // Send the extracted travel times with names and duration in minutes
-      res.json({ travelTimes });
+      // Return the extracted travel times with names and duration in minutes
+      return { travelTimes };
     } else {
       console.error('MapQuest API Error:', response.data.info.statuscode);
-      res.status(500).json({ error: 'An error occurred while fetching data from the API' });
+      throw new Error('An error occurred while fetching data from the API');
     }
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'An error occurred' });
+    throw new Error('An error occurred');
   }
-});
-///////////////////////////////////////////////////////////////////////////
+};
 
+/**
+ * Find spots with strong winds for specified dates and coordinates.
+ *
+ * @param {Object} request - The HTTP request object.
+ * @param {Object} response - The HTTP response object.
+ * @returns {void}
+ * @throws {Error} If an error occurs during the process.
+ */
 exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
     try {
         const value = request.query.value || null;
         const latitude = request.query.latitude || 'unknown';
         const longitude = request.query.longitude || 'unknown';
+
+        let totalMinutes;
+        if (value) {
+            const [hours, minutes] = value.split(':').map(Number);
+            totalMinutes = (hours * 60) + minutes;
+        }
 
         const today = new Date();
         const tomorrow = new Date(today);
@@ -93,22 +111,75 @@ exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
         const formattedTomorrow = tomorrow.toISOString().substr(0, 10);
         const formattedDayAfterTomorrow = dayAfterTomorrow.toISOString().substr(0, 10);
 
-        const todayLines = await getStrongWindsData(formattedToday, 'today', value, latitude, longitude);
-        const tomorrowLines = await getStrongWindsData(formattedTomorrow, 'tomorrow', value, latitude, longitude);
-        const dayAfterTomorrowLines = await getStrongWindsData(formattedDayAfterTomorrow, 'the day after', value, latitude, longitude);
+        // Create an object to save the result from calculateTravelTimes
+        let travelTimesData;
+        try {
+          travelTimesData = await calculateTravelTimes(latitude, longitude);
+          console.log('Travel Times:', travelTimesData);
+        } catch (error) {
+          console.error('Error fetching travel times:', error.message);
+        }
+        console.log('Travel Times Result:', JSON.stringify(travelTimesData));
+
+        const todayLines = await getStrongWindsData(formattedToday, 'today', travelTimesData);
+        const tomorrowLines = await getStrongWindsData(formattedTomorrow, 'tomorrow', travelTimesData);
+        const dayAfterTomorrowLines = await getStrongWindsData(formattedDayAfterTomorrow, 'the day after', travelTimesData);
 
         const allLines = [...todayLines, ...tomorrowLines, ...dayAfterTomorrowLines];
 
-        response.send(JSON.stringify(allLines));
+        console.log('all lines:', JSON.stringify(allLines));
+
+        // Filter the lines based on travel times
+        const filteredLines = filterLinesByTravelTimes(allLines, travelTimesData, totalMinutes);
+
+        console.log('filtered lines:', JSON.stringify(filteredLines));
+
+        response.send(JSON.stringify(filteredLines));
     } catch (error) {
         console.error('Error:', error);
         response.status(500).send('An error occurred');
     }
 });
 
-async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
-    const strongWindsResponse = await axios.get(`https://us-central1-b-surf.cloudfunctions.net/getStrongWinds?date=${date}&value=${value}&latitude=${latitude}&longitude=${longitude}`);
-    const spotsWithStrongWindsArray = strongWindsResponse.data.spotsWithStrongWinds;
+/**
+ * Filter lines based on travel times.
+ *
+ * @param {string[]} lines - Array of lines describing strong wind spots.
+ * @param {Object} travelTimesData - Travel times data object.
+ * @param {number} totalMinutes - Total travel time in minutes.
+ * @returns {string[]} Filtered array of lines.
+ */
+function filterLinesByTravelTimes(lines, travelTimesData, totalMinutes) {
+    // Assuming travelTimesData is an object with a 'travelTimes' property
+    const travelTimesArray = travelTimesData.travelTimes;
+    console.log('travelTimesArray:', JSON.stringify(travelTimesArray));
+
+    // Filter the lines based on the totalMinutes
+    return lines.filter((line) => {
+        // Extract spot name from the line
+        const spotName = line.split(' at ')[1];
+        console.log('spotName:', spotName);
+
+        // Find the corresponding travel time for the spot
+        const spotTravelTime = travelTimesArray.find((data) => data.name === spotName);
+        console.log('spotTravelTime:', JSON.stringify(spotTravelTime));
+
+        // Check if the spotTravelTime is less than or equal to the totalMinutes
+        return spotTravelTime && spotTravelTime.durationMinutes <= totalMinutes;
+    });
+}
+
+/**
+ * Retrieve data about spots with strong winds for a given date and location.
+ *
+ * @param {string} date - The date for which to retrieve wind data.
+ * @param {string} dayLabel - A label indicating the day (e.g., 'today', 'tomorrow').
+ * @returns {Promise<string[]>} An array of lines describing strong wind spots.
+ * @throws {Error} If there is an error while retrieving the data.
+ */
+async function getStrongWindsData(date, dayLabel, travelTimesData) {
+    const response = await getStrongWinds(date, travelTimesData);
+    const spotsWithStrongWindsArray = response.spotsWithStrongWinds;
 
     const lines = [];
 
@@ -132,18 +203,25 @@ async function getStrongWindsData(date, dayLabel, value, latitude, longitude) {
     return lines;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-exports.getStrongWinds = functions.https.onRequest(async (request, response) => {
+/**
+ * Get spots with strong winds.
+ *
+ * @param {string} date - The date for which to retrieve data (optional).
+ * @param {boolean} value - Some optional value (optional).
+ * @returns {Promise<Object>} An object containing spots with strong winds.
+ * @throws {Error} If an error occurs during the process.
+ */
+async function getStrongWinds(date, travelTimesData) {
     try {
-        const { date } = request.query;
+        if (!travelTimesData) {
+            throw new Error('travelTimesData is missing');
+        }
+        console.log('travel time data:', JSON.stringify(travelTimesData));
         const locationsRef = db.collection('locations');
         const locationsSnapshot = await locationsRef.get();
-
         const spotsWithStrongWinds = {};
 
         const promises = locationsSnapshot.docs.map(async (doc) => {
-
             const locationData = doc.data();
             const coords = locationData.cords;
 
@@ -162,7 +240,19 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
 
             if (formattedDate === currentDate.toISOString().substr(0, 10)) {
                 const currentHour = currentDate.getUTCHours();
-                const startIndex = Math.max(currentHour, 5);
+                let startIndex = Math.max(currentHour, 5);
+                if (travelTimesData) {
+                    console.log('here we sss');
+                    const spotName = locationData.name;
+                    const durationMinutes = getDurationMinutesForSpot(spotName, travelTimesData);
+
+                    if (durationMinutes) {
+                        console.log('here we start');
+                        const additionalStartIndex = Math.ceil(durationMinutes / 60);
+                        startIndex += additionalStartIndex;
+                        console.log('Adding ${additionalStartIndex} to startIndex for spot ${spotName}');
+                    }
+                }
                 const endIndex = Math.max(16 - startIndex, 0);
                 relevantHourlyData = hourlyData.time.slice(startIndex, startIndex + endIndex);
                 relevantWindspeedData = hourlyData.windspeed_10m.slice(startIndex, startIndex + endIndex);
@@ -188,28 +278,50 @@ exports.getStrongWinds = functions.https.onRequest(async (request, response) => 
             windStartTime: spotsWithStrongWinds[name].toISOString()
         }));
 
-        console.log('Spots with strong winds:', spotsWithStrongWindsArray);
+        console.log('Spots with strong winds:', JSON.stringify(spotsWithStrongWindsArray));
 
-        const finalResponse = {
+        return {
             spotsWithStrongWinds: spotsWithStrongWindsArray,
         };
-
-        response.status(200).json(finalResponse);
     } catch (error) {
         console.error('Error:', error);
-        response.status(500).send('An error occurred');
+        throw new Error('An error occurred');
     }
-});
+}
 
-///////////////////////////////////////////////////////////////////////////
+/**
+ * Get the duration in minutes for a specific spot from travelTimesData.
+ *
+ * @param {string} spotName - The name of the spot.
+ * @param {Object} travelTimesData - Travel times data object.
+ * @returns {number|null} Duration in minutes or null if not found.
+ */
+function getDurationMinutesForSpot(spotName, travelTimesData) {
+    console.log('before travel array:', JSON.stringify(travelTimesData));
 
-//send msg if wind at fav spot
-exports.scheduledAlerts = functions.pubsub.schedule('15 13 * * *').timeZone('Asia/Jerusalem')
+    // Assuming travelTimesData is an object with a 'travelTimes' property
+    const travelTimesArray = travelTimesData.travelTimes;
+
+    console.log('after travel array:', JSON.stringify(travelTimesArray));
+
+    const spotData = travelTimesArray.find(data => data.name === spotName);
+    return spotData ? spotData.durationMinutes : null;
+}
+
+
+/**
+ * Scheduled function to send alerts to users based on strong wind forecasts at their favorite spots.
+ *
+ * @param {Object} context - The context object for the scheduled execution.
+ * @returns {Promise<null>} A promise that resolves to null after processing.
+ * @throws {Error} If an error occurs during the process.
+ */
+exports.scheduledAlerts = functions.pubsub.schedule('0 7 * * *').timeZone('Asia/Jerusalem')
     .onRun(async (context) => {
         try {
-            const strongWindsResponse = await axios.get('https://us-central1-b-surf.cloudfunctions.net/getStrongWinds');
-
-            const spotsWithStrongWindsArray = strongWindsResponse.data.spotsWithStrongWinds;
+            const response = await getStrongWinds();
+            const spotsWithStrongWindsArray = response.spotsWithStrongWinds;
+            console.log('Response from getStrongWinds:', JSON.stringify(spotsWithStrongWindsArray));
 
             const usersRef = db.collection('users');
             const usersSnapshot = await usersRef.get();
