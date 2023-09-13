@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -49,23 +50,27 @@ class _WindPageState extends State<WindPage> {
   }
 
   Future<void> fetchSpotsWind(String url) async {
-    final response = await http.get(Uri.parse(url));
+    try {
+      final response = await http.get(Uri.parse(url));
 
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonResponse = json.decode(response.body);
-      final List<String> windLines = jsonResponse.cast<String>();
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonResponse = json.decode(response.body);
+        final List<String> windLines = jsonResponse.cast<String>();
 
-      print("efdsgvdsgbvsgfd:");
-      print(_windLines);
+        print('Wind Lines:');
+        print(windLines);
 
-      setState(() {
-        _windLines = windLines;
-      });
-    } else {
-      print("error fetch");
+        setState(() {
+          _windLines = windLines;
+        });
+      } else {
+        print('Error: ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error: $error');
     }
   }
 
@@ -147,15 +152,25 @@ class _WindPageState extends State<WindPage> {
                     await checkAndRequestLocationPermission();
                     final latitude = _userLocation?.latitude;
                     final longitude = _userLocation?.longitude;
-                    final url =
-                        'https://us-central1-b-surf.cloudfunctions.net/findSpotsWind?value=$_selectedValue&latitude=$latitude&longitude=$longitude';
-                    await fetchSpotsWind(url);
+                    // Get the current user
+                    User? user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      final uid =
+                          user.uid; // Get the UID of the authenticated user
+                      final url =
+                          'https://us-central1-b-surf.cloudfunctions.net/findSpotsWind?value=$_selectedValue&latitude=$latitude&longitude=$longitude&uid=$uid';
+                      await fetchSpotsWind(url);
+                    } else {
+                      // Handle the case where the user is not authenticated
+                      // You may want to show an error message or navigate to a login screen
+                    }
                     Navigator.pop(context); // Close the loading dialog
                   },
                   child: Text(
                     'Find The Wind',
                     style: TextStyle(
-                        fontSize: 20), // Adjust the font size if needed
+                      fontSize: 20,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),

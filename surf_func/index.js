@@ -90,12 +90,18 @@ async function calculateTravelTimes(lat, lng) {
  * @throws {Error} If an error occurs during the process.
  */
 exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
-    const user = request.user; // Authenticate the user
-    if (!user) {
-        response.status(403).send('Unauthorized');
-        return;
-      }
     try {
+        const requestedUid = request.query.uid;
+        if (!requestedUid) {
+                    response.status(403).send('Unauthorized');
+                    return;
+                }
+        // Check if the requested UID exists in Firebase Authentication
+        const userRecord = await admin.auth().getUser(requestedUid);
+        if (!userRecord) {
+            response.status(403).send('Unauthorized');
+            return;
+        }
         const value = request.query.value || null;
         const latitude = request.query.latitude || 'unknown';
         const longitude = request.query.longitude || 'unknown';
@@ -243,12 +249,9 @@ async function getStrongWinds(date, travelTimesData) {
                 const currentHour = currentDate.getUTCHours();
                 let startIndex = Math.max(currentHour, 5);
                 if (travelTimesData) {
-                    console.log('here we sss');
                     const spotName = locationData.name;
                     const durationMinutes = getDurationMinutesForSpot(spotName, travelTimesData);
-
                     if (durationMinutes) {
-                        console.log('here we start');
                         const additionalStartIndex = Math.ceil(durationMinutes / 60);
                         startIndex += additionalStartIndex;
                         console.log('Adding ${additionalStartIndex} to startIndex for spot ${spotName}');
