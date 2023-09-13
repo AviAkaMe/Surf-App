@@ -90,6 +90,11 @@ async function calculateTravelTimes(lat, lng) {
  * @throws {Error} If an error occurs during the process.
  */
 exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
+    const user = request.user; // Authenticate the user
+    if (!user) {
+        response.status(403).send('Unauthorized');
+        return;
+      }
     try {
         const value = request.query.value || null;
         const latitude = request.query.latitude || 'unknown';
@@ -213,10 +218,6 @@ async function getStrongWindsData(date, dayLabel, travelTimesData) {
  */
 async function getStrongWinds(date, travelTimesData) {
     try {
-        if (!travelTimesData) {
-            throw new Error('travelTimesData is missing');
-        }
-        console.log('travel time data:', JSON.stringify(travelTimesData));
         const locationsRef = db.collection('locations');
         const locationsSnapshot = await locationsRef.get();
         const spotsWithStrongWinds = {};
@@ -261,7 +262,7 @@ async function getStrongWinds(date, travelTimesData) {
                 relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
             }
 
-            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 5); // speed in knots
+            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 10); // speed in knots
 
             if (earliestIndex !== -1) {
                 const earliestTime = new Date(relevantHourlyData[earliestIndex]);
