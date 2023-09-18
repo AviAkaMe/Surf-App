@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../components/func.dart';
 
 class SpotsPage extends StatefulWidget {
+  // change test
   static const String id = 'spots_page';
 
   @override
