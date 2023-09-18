@@ -13,12 +13,13 @@ class SpotsPage extends StatefulWidget {
 
 class _SpotsPageState extends State<SpotsPage> {
   String userFavoriteSpot = '';
-  User? loggedInUser; // StorloggedInUser = user;e the logged-in user
+  User? loggedInUser;
 
   Future<void> fetchUserFavoriteSpot() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        loggedInUser = user;
         DocumentSnapshot userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(loggedInUser!.uid)
@@ -33,82 +34,6 @@ class _SpotsPageState extends State<SpotsPage> {
       print("Error fetching user's favorite spot: $e");
     }
   }
-
-  // Positioned buildFavoriteButton(String buttonName) {
-  //   return Positioned(
-  //     top: 0,
-  //     right: 0,
-  //     child: InkWell(
-  //       onTap: () async {
-  //         if (isButtonFavorite(buttonName)) {
-  //           await FirebaseFirestore.instance
-  //               .collection('users')
-  //               .doc(loggedInUser!.uid)
-  //               .update({'favoriteSpot': 'none'});
-  //         } else {
-  //           await FirebaseFirestore.instance
-  //               .collection('users')
-  //               .doc(loggedInUser!.uid)
-  //               .update({'favoriteSpot': buttonName});
-  //         }
-  //         await fetchUserFavoriteSpot();
-  //       },
-  //       child: Container(
-  //         width: 50,
-  //         height: 50,
-  //         decoration: BoxDecoration(
-  //           color: Colors.transparent,
-  //         ),
-  //         child: Icon(
-  //           Icons.favorite,
-  //           color: isButtonFavorite(buttonName) ? Colors.red : Colors.blueGrey,
-  //           size: 40,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Positioned buildFavoriteButton(String buttonName) {
-  //   return Positioned(
-  //     top: 0,
-  //     right: 0,
-  //     child: InkWell(
-  //       onTap: () async {
-  //         final FirebaseMessaging _firebaseMessaging =
-  //             FirebaseMessaging.instance;
-  //         String? deviceToken = await _firebaseMessaging.getToken();
-  //
-  //         if (isButtonFavorite(buttonName)) {
-  //           await FirebaseFirestore.instance
-  //               .collection('users')
-  //               .doc(loggedInUser!.uid)
-  //               .update({'favoriteSpot': 'none', 'deviceToken': deviceToken});
-  //         } else {
-  //           await FirebaseFirestore.instance
-  //               .collection('users')
-  //               .doc(loggedInUser!.uid)
-  //               .update(
-  //                   {'favoriteSpot': buttonName, 'deviceToken': deviceToken});
-  //         }
-  //
-  //         await fetchUserFavoriteSpot();
-  //       },
-  //       child: Container(
-  //         width: 50,
-  //         height: 50,
-  //         decoration: BoxDecoration(
-  //           color: Colors.transparent,
-  //         ),
-  //         child: Icon(
-  //           Icons.favorite,
-  //           color: isButtonFavorite(buttonName) ? Colors.red : Colors.blueGrey,
-  //           size: 40,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Positioned buildFavoriteButton(String buttonName, BuildContext context) {
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
