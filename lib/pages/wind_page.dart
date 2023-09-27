@@ -4,6 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../components/func.dart';
+
 class WindPage extends StatefulWidget {
   static const String id = 'wind_page';
 
@@ -77,13 +79,7 @@ class _WindPageState extends State<WindPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.blue, Colors.white],
-        ),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(

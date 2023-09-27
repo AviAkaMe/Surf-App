@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
 
+// Define the SignupPage as a StatefulWidget
 class SignupPage extends StatefulWidget {
   static const String id = 'signup_page';
 
@@ -13,11 +14,14 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState();
 }
 
+// Create the state class for SignupPage
 class _SignupPageState extends State<SignupPage> {
+  // Create TextEditingController instances for email, password, and confirmation fields
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final confController = TextEditingController();
 
+  // Function to check if a password is strong (meets specific criteria)
   bool isPasswordStrong(String password) {
     return password.length >= 6 &&
         password.contains(RegExp(r'[A-Z]')) &&
@@ -25,8 +29,10 @@ class _SignupPageState extends State<SignupPage> {
         password.contains(RegExp(r'[0-9]'));
   }
 
+  // Function to handle user sign-up
   void signUp() async {
     if (passController.text != confController.text) {
+      // Show an error dialog if passwords don't match
       showDialog(
           context: context,
           builder: (context) {
@@ -37,6 +43,7 @@ class _SignupPageState extends State<SignupPage> {
             );
           });
     } else if (!isPasswordStrong(passController.text)) {
+      // Show an error dialog if the password is not strong enough
       showDialog(
         context: context,
         builder: (context) {
@@ -49,6 +56,7 @@ class _SignupPageState extends State<SignupPage> {
         },
       );
     } else {
+      // Show a loading indicator while signing up
       showDialog(
         context: context,
         builder: (context) {
@@ -58,13 +66,12 @@ class _SignupPageState extends State<SignupPage> {
         },
       );
       try {
+        // Create a new user with Firebase Authentication
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passController.text,
         );
-
-        //String? deviceToken = await _firebaseMessaging.getToken();
 
         // Create a user document in the "users" collection
         await FirebaseFirestore.instance
@@ -75,11 +82,13 @@ class _SignupPageState extends State<SignupPage> {
           'deviceToken': 'none', // Initialize the device token
         });
 
+        // Navigate to the LoginPage after successful sign-up
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } on FirebaseAuthException catch (e) {
+        // Close the loading indicator and show an error message for authentication failures
         Navigator.pop(context);
         errorMessage(context, e.code);
       }
@@ -89,12 +98,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

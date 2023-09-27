@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../components/func.dart';
+
 class SettingsPage extends StatelessWidget {
   static const String id = 'settings_page';
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.grey[300],

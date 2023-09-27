@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../components/func.dart';
+
 class KitePage extends StatefulWidget {
   static const String id = 'kite_page';
   @override
@@ -27,13 +29,7 @@ class _KitePageState extends State<KitePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white],
-          ),
-        ),
+        decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(

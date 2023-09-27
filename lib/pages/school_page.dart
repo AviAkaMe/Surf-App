@@ -13,12 +13,7 @@ class _SchoolPage extends State<SchoolPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
@@ -33,9 +28,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/asabro.jpeg',
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/asabro.jpeg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -63,9 +61,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/asabro.jpeg',
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/asabro.jpeg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -95,8 +96,11 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 100,
                     width: 300,
-                    child: Image.asset('lib/images/surfcenter.png',
-                        fit: BoxFit.fill),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset('lib/images/surfcenter.png',
+                          fit: BoxFit.fill),
+                    ),
                   ),
                 ),
                 Container(
@@ -125,9 +129,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/sunshine.jpeg',
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/sunshine.jpeg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -157,9 +164,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/IKS.jpg',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/IKS.jpg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -189,9 +199,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/kitelab.png',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/kitelab.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -222,9 +235,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 200,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/surfshack.png',
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/surfshack.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -254,9 +270,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 100,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/kitesurfeilat.png',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/kitesurfeilat.png',
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),
@@ -286,9 +305,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 100,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/core.png',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/core.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -319,9 +341,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 100,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/freegull.png',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/freegull.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -351,9 +376,12 @@ class _SchoolPage extends State<SchoolPage> {
                   child: Container(
                     height: 100,
                     width: 300,
-                    child: Image.asset(
-                      'lib/images/mypoint.png',
-                      fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'lib/images/mypoint.png',
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ),

@@ -3,17 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
+import '../components/func.dart';
 
+// Define the ResetPage as a StatefulWidget
 class ResetPage extends StatefulWidget {
-  static const String id = 'reset_page';
+  static const String id =
+      'reset_page'; // Define a unique identifier for this page
 
   @override
-  State<ResetPage> createState() => _ResetPageState();
+  State<ResetPage> createState() =>
+      _ResetPageState(); // Create the state for the ResetPage
 }
 
+// Create the state class for ResetPage
 class _ResetPageState extends State<ResetPage> {
+  // Create a TextEditingController instance for email
   final emailController = TextEditingController();
 
+  // Function to reset the password
   void resetPassword(BuildContext context) async {
     String email = emailController.text.trim();
     showDialog(
@@ -44,32 +51,14 @@ class _ResetPageState extends State<ResetPage> {
               ));
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context); // Close the CircularProgressIndicator dialog
-      errorMessage(e.code);
+      errorMessage(context, e.code);
     }
-  }
-
-  void errorMessage(String error) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Center(
-            child: Text(error),
-          ),
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

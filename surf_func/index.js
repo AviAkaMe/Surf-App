@@ -2,7 +2,9 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const axios = require('axios');
 
+//admin.initializeApp(functions.config().firebase);
 admin.initializeApp();
+
 const db = admin.firestore();
 const fcm = admin.messaging();
 
@@ -265,7 +267,7 @@ async function getStrongWinds(date, travelTimesData) {
                 relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
             }
 
-            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 10); // speed in knots
+            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 11); // speed in knots
 
             if (earliestIndex !== -1) {
                 const earliestTime = new Date(relevantHourlyData[earliestIndex]);

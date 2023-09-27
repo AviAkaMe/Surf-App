@@ -7,17 +7,23 @@ import 'package:b_surf/components/text_box.dart';
 import 'package:b_surf/components/button.dart';
 import 'nav_page.dart';
 
+// Define the LoginPage as a StatefulWidget
 class LoginPage extends StatefulWidget {
-  static const String id = 'login_page';
+  static const String id =
+      'login_page'; // Define a unique identifier for this page
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() =>
+      _LoginPageState(); // Create the state for the LoginPage
 }
 
+// Create the state class for LoginPage
 class _LoginPageState extends State<LoginPage> {
+  // Create TextEditingController instances for email and password fields
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
+  // Function to handle user sign-in
   void signIn() async {
     showDialog(
       context: context,
@@ -28,13 +34,15 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
     try {
+      // Sign in with Firebase using email and password
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passController.text,
       );
 
       Navigator.pop(context);
-      Navigator.pushNamed(context, NavPage.id);
+      Navigator.pushNamed(
+          context, NavPage.id); // Navigate to the NavPage on successful sign-in
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context); // Close the CircularProgressIndicator dialog
       errorMessage(context, e.code);
@@ -44,12 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blue, Colors.white]),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

@@ -55,3 +55,11 @@ void errorMessage(BuildContext context, String error) {
     },
   );
 }
+
+const BoxDecoration gradientBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Colors.blue, Colors.white],
+  ),
+);

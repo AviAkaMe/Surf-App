@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/func.dart';
 import 'info_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -7,13 +8,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.blue, Colors.white],
-        ),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

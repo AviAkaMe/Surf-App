@@ -5,22 +5,29 @@ import 'package:b_surf/pages/wind_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../components/func.dart';
 import 'home_page.dart';
 import 'info_page.dart';
 import 'kite_page.dart';
 import 'login_page.dart';
 
+// Define the NavPage as a StatefulWidget
 class NavPage extends StatefulWidget {
-  static const String id = 'nav_page';
+  static const String id =
+      'nav_page'; // Define a unique identifier for this page
 
   @override
-  _NavPageState createState() => _NavPageState();
+  _NavPageState createState() =>
+      _NavPageState(); // Create the state for the NavPage
 }
 
+// Create the state class for NavPage
 class _NavPageState extends State<NavPage> {
-  int _currentIndex = 2;
+  int _currentIndex =
+      2; // Initialize the current index for the bottom navigation bar
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // Define a list of pages to be displayed based on the selected index
   final List<Widget> _pages = [
     WindPage(),
     KitePage(),
@@ -29,6 +36,7 @@ class _NavPageState extends State<NavPage> {
     SchoolPage(),
   ];
 
+  // Function to open the drawer
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
   }
@@ -38,22 +46,16 @@ class _NavPageState extends State<NavPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('B - S u r f'),
+        title: Text('B - S u r f'), // Set the title of the AppBar
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: Icon(Icons.menu), // Add a menu icon to open the drawer
           onPressed: _openDrawer,
         ),
         backgroundColor:
             Colors.transparent, // Set the background color to transparent
         elevation: 0, // Remove the shadow from the AppBar
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blue, Colors.white],
-            ),
-          ),
+          decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
         ),
       ),
       drawer: Drawer(
@@ -68,10 +70,6 @@ class _NavPageState extends State<NavPage> {
                     Icons.surfing,
                     size: 100,
                   ),
-                  // child: Text(
-                  //   "M E N U",
-                  //   style: TextStyle(fontSize: 40),
-                  // ),
                 ),
               ),
               ListTile(
@@ -101,11 +99,11 @@ class _NavPageState extends State<NavPage> {
                 ),
                 leading: Icon(Icons.logout),
                 onTap: () {
-                  _signOut();
-                  Navigator.pushNamed(context, LoginPage.id);
+                  _signOut(); // Call the _signOut function to sign the user out
+                  Navigator.pushNamed(
+                      context, LoginPage.id); // Navigate to the LoginPage
                 },
               ),
-              // Add more ListTiles for other navigation options
             ],
           ),
         ),
@@ -115,21 +113,22 @@ class _NavPageState extends State<NavPage> {
           Expanded(
             child: Stack(
               children: [
-                // Removed the Container with gradient from here
                 Center(
-                  child: _pages[_currentIndex],
+                  child: _pages[_currentIndex], // Display the selected page
                 ),
                 Positioned(
                   left: 0,
                   right: 0,
                   bottom: 0,
                   child: CurvedNavigationBar(
-                    color: Colors.white38,
+                    color: Colors
+                        .white38, // Set the background color for the bottom navigation bar
                     backgroundColor: Colors.transparent,
-                    index: _currentIndex,
+                    index: _currentIndex, // Set the current index
                     onTap: (index) {
                       setState(() {
-                        _currentIndex = index;
+                        _currentIndex =
+                            index; // Update the current index on tap
                       });
                     },
                     items: [
@@ -150,10 +149,10 @@ class _NavPageState extends State<NavPage> {
   }
 }
 
+// Function to sign out the user
 void _signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
-    // You can also add additional code here if needed after signing out
   } catch (e) {
     print("Error signing out: $e");
   }

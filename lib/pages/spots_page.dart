@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../components/func.dart';
 
 class SpotsPage extends StatefulWidget {
-  // change test
   static const String id = 'spots_page';
 
   @override
@@ -102,13 +101,7 @@ class _SpotsPageState extends State<SpotsPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Colors.blue, Colors.white],
-        ),
-      ),
+      decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
