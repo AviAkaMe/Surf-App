@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/func.dart';
 
 class KitePage extends StatefulWidget {
@@ -9,21 +8,22 @@ class KitePage extends StatefulWidget {
 }
 
 class _KitePageState extends State<KitePage> {
-  int inputNumber = 0;
-  String result = '';
-  String dropdownValue = '10'; // Set the default value here
+  String result = ''; // Variable to store the calculation result
+  String dropdownValue = '10'; // Set the default dropdown value to '10'
 
+  // A table of weight-to-kite-size mappings with weight ranges
   List<Map<String, dynamic>> table = [
-    {'number': 40, 'value': '6'},
-    {'number': 50, 'value': '8'},
-    {'number': 60, 'value': '9'},
-    {'number': 70, 'value': '10'},
-    {'number': 80, 'value': '12'},
-    {'number': 90, 'value': '14'},
-    {'number': 100, 'value': '16'},
+    {'number': '40-50', 'value': '6'},
+    {'number': '50-60', 'value': '8'},
+    {'number': '60-70', 'value': '9'},
+    {'number': '70-80', 'value': '10'},
+    {'number': '80-90', 'value': '12'},
+    {'number': '90-100', 'value': '14'},
+    {'number': '100-110', 'value': '16'},
   ];
 
-  int _currentNumber = 10; // Set the initial number to the default value
+  String selectedWeightRange =
+      '40-50'; // Initialize with the default weight range
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +57,10 @@ class _KitePageState extends State<KitePage> {
                     onChanged: (newValue) {
                       setState(() {
                         dropdownValue = newValue!;
+                        // Update the selected weight range
+                        selectedWeightRange = newValue;
                         // Look up the corresponding value from the table
                         result = findValueInTable(newValue);
-                        _currentNumber = int.parse(newValue);
                       });
                     },
                     items: table.map((entry) {
@@ -83,7 +84,7 @@ class _KitePageState extends State<KitePage> {
                   ),
                   child: Center(
                     child: Text(
-                      '$_currentNumber',
+                      '$selectedWeightRange',
                       style: TextStyle(color: Colors.white, fontSize: 35),
                     ),
                   ),
@@ -96,6 +97,7 @@ class _KitePageState extends State<KitePage> {
     );
   }
 
+  // Function to find the corresponding value in the table
   String findValueInTable(String value) {
     for (var entry in table) {
       if (value == entry['value'].toString()) {

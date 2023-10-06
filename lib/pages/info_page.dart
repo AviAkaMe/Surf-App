@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
 import '../components/func.dart';
 
 class InfoPage extends StatefulWidget {
@@ -11,19 +10,23 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  // Define the URLs of the instructional videos
   final video1 = "https://www.youtube.com/watch?v=-n1R0hwEr6s&t=479s";
   final video2 = "https://www.youtube.com/watch?v=Vaa3RMTyxEg";
   final video3 = "https://www.youtube.com/watch?v=RtwkPeg8lO4";
 
+  // Declare YoutubePlayerController instances for the videos
   late YoutubePlayerController _controller1;
   late YoutubePlayerController _controller2;
   late YoutubePlayerController _controller3;
 
   void initState() {
+    // Convert video URLs to video IDs
     final IDviideo1 = YoutubePlayer.convertUrlToId(video1);
     final IDviideo2 = YoutubePlayer.convertUrlToId(video2);
     final IDviideo3 = YoutubePlayer.convertUrlToId(video3);
 
+    // Initialize YoutubePlayerControllers with video IDs and settings
     _controller1 = YoutubePlayerController(
       initialVideoId: IDviideo1!,
       flags: YoutubePlayerFlags(autoPlay: false),
@@ -32,7 +35,6 @@ class _InfoPageState extends State<InfoPage> {
       initialVideoId: IDviideo2!,
       flags: YoutubePlayerFlags(autoPlay: false),
     );
-
     _controller3 = YoutubePlayerController(
       initialVideoId: IDviideo3!,
       flags: YoutubePlayerFlags(autoPlay: false),
@@ -43,6 +45,7 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   void dispose() {
+    // Dispose of YoutubePlayerControllers when the page is disposed
     _controller1.dispose();
     _controller2.dispose();
     _controller3.dispose();
@@ -55,7 +58,7 @@ class _InfoPageState extends State<InfoPage> {
         decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
         child: Scaffold(
           appBar: AppBar(
-            title: Text("C U R S E"),
+            title: Text("C O U R S E"),
             backgroundColor: Colors.white70,
             centerTitle: true,
           ),

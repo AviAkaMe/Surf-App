@@ -40,7 +40,8 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, InfoPage.id);
+                    Navigator.pushNamed(
+                        context, InfoPage.id); // nav to the info page
                   },
                   child: Text(
                     'למידע נוסף וסרטונים לחץ כאן',
