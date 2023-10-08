@@ -15,6 +15,14 @@ class _SpotsPageState extends State<SpotsPage> {
   String userFavoriteSpot = '';
   User? loggedInUser;
 
+  /**
+   * Fetch the favorite spot of the currently logged-in user from Firestore.
+   *
+   * This function retrieves the favorite spot data associated with the currently authenticated user
+   * and updates the `userFavoriteSpot` variable, if available.
+   *
+   * @throws {String} If an error occurs during the fetching process.
+   */
   Future<void> fetchUserFavoriteSpot() async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -46,8 +54,7 @@ class _SpotsPageState extends State<SpotsPage> {
           // Request permission for FCM notifications
           NotificationSettings settings =
               await _firebaseMessaging.requestPermission(
-            announcement:
-                true, // Optional: Set to true if you want to receive critical alerts
+            announcement: true, // Optional // true to receive critical alerts
           );
 
           if (settings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -134,7 +141,8 @@ class _SpotsPageState extends State<SpotsPage> {
                 ),
               ),
               InkWell(
-                onTap: () => locate('locations', 'Spot_betset'),
+                onTap: () =>
+                    locate('locations', 'Spot_betset'), // from func page
                 child: Stack(
                   children: [
                     Container(
@@ -165,10 +173,11 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: 'קריות \n',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold)),
+                        text: 'קריות \n',
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold),
+                      ),
                       TextSpan(
                           text:
                               "הספוט בקריות נחשב נוח יותר למתחילים. יש בו רצועה חולית ארוכה\n  ",

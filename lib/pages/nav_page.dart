@@ -1,5 +1,4 @@
 import 'package:b_surf/pages/school_page.dart';
-import 'package:b_surf/pages/settings_page.dart';
 import 'package:b_surf/pages/spots_page.dart';
 import 'package:b_surf/pages/wind_page.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -74,16 +73,6 @@ class _NavPageState extends State<NavPage> {
               ),
               ListTile(
                 title: Text(
-                  "Settings Page",
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(Icons.settings),
-                onTap: () {
-                  Navigator.pushNamed(context, SettingsPage.id);
-                },
-              ),
-              ListTile(
-                title: Text(
                   "Info Page",
                   style: TextStyle(fontSize: 20),
                 ),
@@ -149,7 +138,13 @@ class _NavPageState extends State<NavPage> {
   }
 }
 
-// Function to sign out the user
+/**
+ * Sign out the currently authenticated user.
+ *
+ * This function attempts to sign out the user using Firebase Authentication.
+ * If the sign-out process is successful, the user is logged out.
+ * If any errors occur during the sign-out process, they are caught and printed to the console.
+ */
 void _signOut() async {
   try {
     await FirebaseAuth.instance.signOut();

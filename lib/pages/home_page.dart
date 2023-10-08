@@ -23,8 +23,7 @@ class HomePage extends StatelessWidget {
                   child: Image.asset('lib/images/BBB.png'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25), // Adjust the horizontal space here
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
                     '''
 קייט סרפינג הוא ספורט אקסטרים ימי שבו הגולש מחובר לעפיפון גדול ומייצר כוח בעזרת הרוח מדובר באחד מענפי הספורט הימי המפותחים ביותר כיום

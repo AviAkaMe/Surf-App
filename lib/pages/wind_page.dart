@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import '../components/func.dart';
 
 class WindPage extends StatefulWidget {
@@ -17,7 +16,18 @@ class _WindPageState extends State<WindPage> {
   String _selectedValue = '0:30';
   List<String> _windLines = []; // Declare _helloLines here
   Position? _userLocation; // Add this variable to store user's location
+  String _windMessage = ''; // Add this variable to store the wind message
 
+  /**
+   * Check and request location permissions, and handle location access scenarios.
+   *
+   * This function checks the current location permissions using `Geolocator.checkPermission()`,
+   * and then requests permissions using `Geolocator.requestPermission()` if needed.
+   * It handles scenarios where the user has denied location permissions, permanently denied them,
+   * or granted permissions, and takes appropriate actions such as showing dialogs and retrieving the user's location.
+   *
+   * @throws {Exception} If an error occurs during the permission check or location retrieval.
+   */
   Future<void> checkAndRequestLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
@@ -26,10 +36,27 @@ class _WindPageState extends State<WindPage> {
 
       if (permission == LocationPermission.deniedForever) {
         // The user has permanently denied location permissions.
-        // Handle this case gracefully, possibly by displaying a dialog.
+        showPermanentlyDeniedDialog(context);
       } else if (permission == LocationPermission.denied) {
         // The user denied location permissions.
-        // You can display a message or request permissions again.
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Location Access Required'),
+              content: Text(
+                  'To use this feature, please reload the page and grant location access.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       } else {
         // Permission granted. You can proceed to get the user's location.
         Position position = await Geolocator.getCurrentPosition();
@@ -40,7 +67,7 @@ class _WindPageState extends State<WindPage> {
       }
     } else if (permission == LocationPermission.deniedForever) {
       // The user has permanently denied location permissions.
-      // Handle this case gracefully, possibly by displaying a dialog.
+      showPermanentlyDeniedDialog(context);
     } else {
       // Permission already granted. You can proceed to get the user's location.
       Position position = await Geolocator.getCurrentPosition();
@@ -51,6 +78,16 @@ class _WindPageState extends State<WindPage> {
     }
   }
 
+  /**
+   * Fetch wind information from a given URL and update the wind lines.
+   *
+   * This function makes an HTTP GET request to the specified URL to retrieve wind information.
+   * It handles the response status code and updates the `_windLines` state with the wind data if the response is successful (status code 200).
+   * If there is an error during the request, it prints an error message.
+   *
+   * @param {String} url - The URL to fetch wind information from.
+   * @throws {Exception} If an error occurs during the HTTP request or data processing.
+   */
   Future<void> fetchSpotsWind(String url) async {
     try {
       final response = await http.get(Uri.parse(url));
@@ -59,6 +96,7 @@ class _WindPageState extends State<WindPage> {
       print('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
+        // is ok
         final List<dynamic> jsonResponse = json.decode(response.body);
         final List<String> windLines = jsonResponse.cast<String>();
 
@@ -134,7 +172,6 @@ class _WindPageState extends State<WindPage> {
                   style: ElevatedButton.styleFrom(
                     minimumSize:
                         Size(200, 60), // Set the minimum size of the button
-                    // You can customize other properties here as well, such as background color, etc.
                   ),
                   onPressed: () async {
                     showDialog(
@@ -156,9 +193,17 @@ class _WindPageState extends State<WindPage> {
                       final url =
                           'https://us-central1-b-surf.cloudfunctions.net/findSpotsWind?value=$_selectedValue&latitude=$latitude&longitude=$longitude&uid=$uid';
                       await fetchSpotsWind(url);
+                      // Update the wind message based on whether wind data is available
+                      setState(() {
+                        if (_windLines.isNotEmpty) {
+                          _windMessage =
+                              ''; // Clear the message if there is wind data
+                        } else {
+                          _windMessage = 'No wind in the next 3 days :(';
+                        }
+                      });
                     } else {
-                      // Handle the case where the user is not authenticated
-                      // You may want to show an error message or navigate to a login screen
+                      print('error getting the user');
                     }
                     Navigator.pop(context); // Close the loading dialog
                   },
@@ -172,17 +217,22 @@ class _WindPageState extends State<WindPage> {
                 SizedBox(height: 20),
                 Container(
                   decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.blueAccent)),
+                    color: Colors.transparent,
+                    border: Border.all(color: Colors.blueAccent),
+                  ),
                   child: Column(
-                    children: _windLines
-                        .map(
-                          (line) => Text(
-                            line,
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                        )
-                        .toList(),
+                    children: [
+                      if (_windMessage.isNotEmpty)
+                        Text(
+                          _windMessage,
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      for (var line in _windLines)
+                        Text(
+                          line,
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 100),
@@ -193,4 +243,25 @@ class _WindPageState extends State<WindPage> {
       ),
     );
   }
+}
+
+void showPermanentlyDeniedDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Location Access Required'),
+        content: Text(
+            'You have permanently denied location access. To use this feature, please enable location access in your device settings.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/func.dart';
+import '../components/kite.dart';
 
 class KitePage extends StatefulWidget {
   static const String id = 'kite_page';
@@ -22,8 +23,7 @@ class _KitePageState extends State<KitePage> {
     {'number': '100-110', 'value': '16'},
   ];
 
-  String selectedWeightRange =
-      '40-50'; // Initialize with the default weight range
+  String selectedWeightRange = '10'; // Initialize with the default value
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +34,9 @@ class _KitePageState extends State<KitePage> {
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
-              Icon(
-                Icons.calculate,
-                size: 190,
+              Kite(), // call the spinning image
+              SizedBox(
+                height: 20,
               ),
               Text(
                 'Kite Size Calculator',
@@ -45,7 +45,7 @@ class _KitePageState extends State<KitePage> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Please select your weight: ',
+                'Please select your weight range: ',
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
@@ -97,7 +97,12 @@ class _KitePageState extends State<KitePage> {
     );
   }
 
-  // Function to find the corresponding value in the table
+  /**
+   * Find and return a value from a table based on a specified 'value'.
+   *
+   * @param {String} value - The value to search for in the table.
+   * @returns {String} The corresponding value found in the table, or an empty string if not found.
+   */
   String findValueInTable(String value) {
     for (var entry in table) {
       if (value == entry['value'].toString()) {

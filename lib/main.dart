@@ -11,7 +11,6 @@ import 'package:b_surf/pages/info_page.dart';
 import 'package:b_surf/pages/wind_page.dart';
 import 'package:b_surf/pages/school_page.dart';
 import 'package:b_surf/pages/nav_page.dart';
-import 'package:b_surf/pages/settings_page.dart';
 
 void main() async {
   // Ensure that Flutter is initialized
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
         WindPage.id: (context) => WindPage(),
         SchoolPage.id: (context) => SchoolPage(),
         NavPage.id: (context) => NavPage(),
-        SettingsPage.id: (context) => SettingsPage(),
       },
     );
   }

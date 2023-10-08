@@ -24,7 +24,8 @@ class _SchoolPage extends State<SchoolPage> {
             child: Column(
               children: [
                 InkWell(
-                  onTap: () => locate('schools', 'school_extremeEilat'),
+                  onTap: () => locate(
+                      'schools', 'school_extremeEilat'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -57,7 +58,8 @@ class _SchoolPage extends State<SchoolPage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => locate('schools', 'school_extremeBeitYanai'),
+                  onTap: () => locate(
+                      'schools', 'school_extremeBeitYanai'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -92,7 +94,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_extremeBeitYanai'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_surfCenter'),
+                  onTap: () =>
+                      locate('schools', 'school_surfCenter'), // from func page
                   child: Container(
                     height: 100,
                     width: 300,
@@ -125,7 +128,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_surfCenter'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_sunShine'),
+                  onTap: () =>
+                      locate('schools', 'school_sunShine'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -160,7 +164,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_sunShine'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_iks'),
+                  onTap: () =>
+                      locate('schools', 'school_iks'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -195,7 +200,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_iks'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_kiteLab'),
+                  onTap: () =>
+                      locate('schools', 'school_kiteLab'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -231,7 +237,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_kiteLab'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_surfShack'),
+                  onTap: () =>
+                      locate('schools', 'school_surfShack'), // from func page
                   child: Container(
                     height: 200,
                     width: 300,
@@ -266,7 +273,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_surfShack'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_kiteSurf'),
+                  onTap: () =>
+                      locate('schools', 'school_kiteSurf'), // from func page
                   child: Container(
                     height: 100,
                     width: 300,
@@ -301,7 +309,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_kiteSurf'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_core'),
+                  onTap: () =>
+                      locate('schools', 'school_core'), // from func page
                   child: Container(
                     height: 100,
                     width: 300,
@@ -337,7 +346,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_core'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_freeGull'),
+                  onTap: () =>
+                      locate('schools', 'school_freeGull'), // from func page
                   child: Container(
                     height: 100,
                     width: 300,
@@ -372,7 +382,8 @@ class _SchoolPage extends State<SchoolPage> {
                 FetchPhone(schoolId: 'school_freeGull'),
                 SizedBox(height: 30),
                 InkWell(
-                  onTap: () => locate('schools', 'school_myPoint'),
+                  onTap: () =>
+                      locate('schools', 'school_myPoint'), // from func page
                   child: Container(
                     height: 100,
                     width: 300,
@@ -415,6 +426,14 @@ class _SchoolPage extends State<SchoolPage> {
   }
 }
 
+/**
+ * A custom button for initiating a phone call.
+ *
+ * This `CallButton` widget is designed to create an ElevatedButton that, when pressed,
+ * initiates a phone call to the specified phone number.
+ *
+ * @param {String} phoneNumber - The phone number to call when the button is pressed.
+ */
 class CallButton extends StatelessWidget {
   final String phoneNumber;
 
@@ -438,6 +457,14 @@ class CallButton extends StatelessWidget {
   }
 }
 
+/**
+ * A widget that fetches a school's phone number and displays a call button.
+ *
+ * This `FetchPhone` widget retrieves a school's phone number from Firestore based on the provided `schoolId`
+ * and displays a `CallButton` to initiate a phone call to that phone number.
+ *
+ * @param {String} schoolId - The unique identifier for the school.
+ */
 class FetchPhone extends StatelessWidget {
   final String
       schoolId; // Assuming you have a unique identifier for each school

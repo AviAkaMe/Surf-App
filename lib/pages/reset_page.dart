@@ -69,7 +69,7 @@ class _ResetPageState extends State<ResetPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Welcome to reset! ',
+                      'Reset password page ',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
@@ -84,7 +84,7 @@ class _ResetPageState extends State<ResetPage> {
                     const SizedBox(height: 10),
                     Button(
                       text: 'Reset-Password',
-                      onTap: () => resetPassword(context),
+                      onTap: () => resetPassword(context), // from func page
                     ),
                     const SizedBox(height: 10),
                     TextButton(
