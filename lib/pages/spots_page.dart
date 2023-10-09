@@ -133,7 +133,7 @@ class _SpotsPageState extends State<SpotsPage> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       TextSpan(
-                        text: 'הספוט בבצת ידוע ברוחות צפוניות\n',
+                        text: ' הספוט בבצת ידוע ברוחות צפוניות\n',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
