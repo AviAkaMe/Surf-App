@@ -17,6 +17,7 @@ class _WindPageState extends State<WindPage> {
   List<String> _windLines = []; // Declare _helloLines here
   Position? _userLocation; // Add this variable to store user's location
   String _windMessage = ''; // Add this variable to store the wind message
+  bool premi = false;
 
   /**
    * Check and request location permissions, and handle location access scenarios.
@@ -60,6 +61,7 @@ class _WindPageState extends State<WindPage> {
       } else {
         // Permission granted. You can proceed to get the user's location.
         Position position = await Geolocator.getCurrentPosition();
+        premi = true;
         // Now you can send this location to your cloud app.
         setState(() {
           _userLocation = position;
@@ -71,6 +73,7 @@ class _WindPageState extends State<WindPage> {
     } else {
       // Permission already granted. You can proceed to get the user's location.
       Position position = await Geolocator.getCurrentPosition();
+      premi = true;
       // Now you can send this location to your cloud app.
       setState(() {
         _userLocation = position;
@@ -126,6 +129,7 @@ class _WindPageState extends State<WindPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 100),
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: CircleAvatar(
@@ -135,8 +139,8 @@ class _WindPageState extends State<WindPage> {
                 ),
                 SizedBox(height: 30),
                 Text(
-                  'Please select Max Drive Time: ',
-                  style: TextStyle(fontSize: 15),
+                  'אנא בחר את זמן הנסיעה המירבי אותו\n את/ה מוכנים לנסוע לספוט \n התחזית הינה לשלושת הימים הקרובים * ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10),
@@ -198,7 +202,7 @@ class _WindPageState extends State<WindPage> {
                         if (_windLines.isNotEmpty) {
                           _windMessage =
                               ''; // Clear the message if there is wind data
-                        } else {
+                        } else if (premi) {
                           _windMessage = 'No wind in the next 3 days :(';
                         }
                       });

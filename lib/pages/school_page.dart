@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../components/ExplanationPopup.dart';
 import '../components/func.dart';
 
 class SchoolPage extends StatefulWidget {
@@ -10,8 +11,19 @@ class SchoolPage extends StatefulWidget {
 }
 
 class _SchoolPage extends State<SchoolPage> {
+  void _showExplanation(BuildContext context) {
+    ExplanationPopup.show(
+      context: context,
+      pageName: 'עמוד המועדונים',
+      message:
+          'בעמוד זה תוכל בנוסף לפתיחת אפליקציית ההתקשרות בטלפון שלך גם ללחוץ על לוגו המועדון ולקבל פרטי הגעה מדויקים אליו',
+      prefsKey: 'showExplanation_SchoolPage',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _showExplanation(context); // Call the explanation method
     return Container(
       decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
       child: Scaffold(
@@ -23,6 +35,45 @@ class _SchoolPage extends State<SchoolPage> {
             margin: EdgeInsets.fromLTRB(50, 10, 50, 0),
             child: Column(
               children: [
+                // const SizedBox(height: 20),
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 10),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(10),
+                //     boxShadow: [
+                //       BoxShadow(
+                //         color: Colors.white.withOpacity(0.5),
+                //         spreadRadius: 5,
+                //         blurRadius: 5,
+                //         offset: Offset(0, 0), // changes position of shadow
+                //       ),
+                //     ],
+                //   ),
+                //   child: RichText(
+                //     textAlign: TextAlign.right,
+                //     text: TextSpan(
+                //       style: TextStyle(color: Colors.black, fontSize: 20),
+                //       children: <TextSpan>[
+                //         TextSpan(
+                //           text: ' הידעת ?',
+                //           style: TextStyle(
+                //               color: Colors.red,
+                //               fontWeight: FontWeight.bold,
+                //               decoration: TextDecoration.underline),
+                //         ),
+                //         TextSpan(
+                //           text:
+                //               " בעמוד זה תוכל בנוסף לפתיחת אפליקציית ההתקשרות בטלפון שלך גם ללחוץ על לוגו המועדון ולקבל פרטי הגעה מדויקים אליו ",
+                //           style: TextStyle(
+                //               fontSize: 20, fontWeight: FontWeight.bold),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                SizedBox(
+                  height: 40,
+                ),
                 InkWell(
                   onTap: () => locate(
                       'schools', 'school_extremeEilat'), // from func page

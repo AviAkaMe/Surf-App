@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,3 +102,17 @@ const BoxDecoration gradientBoxDecoration = BoxDecoration(
     colors: [Colors.blue, Colors.white],
   ),
 );
+/**
+ * Sign out the currently authenticated user.
+ *
+ * This function attempts to sign out the user using Firebase Authentication.
+ * If the sign-out process is successful, the user is logged out.
+ * If any errors occur during the sign-out process, they are caught and printed to the console.
+ */
+void signOut() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+  } catch (e) {
+    print("Error signing out: $e");
+  }
+}

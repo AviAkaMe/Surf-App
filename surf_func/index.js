@@ -36,7 +36,7 @@ async function calculateTravelTimes(lat, lng) {
 
     // Modify the user's location to have a name and coords
     const userLocation = {
-      name: 'currentUser', // You can choose any name you prefer, e.g., 'currentUser'
+      name: 'currentUser',
       coords: userCoords,
     };
 
@@ -46,7 +46,7 @@ async function calculateTravelTimes(lat, lng) {
     console.log('Updated Destination Locations:', JSON.stringify(locations));
 
     // Prepare API request for MapQuest Distance Matrix API
-    const apiKey = 'meUpZF1IJC1xerOyaagheDBFWvK5uOk1';
+    const apiKey = 'ohMy4kFEAKR7yTcBrX9R9OKPRIn3IM9B';
     const apiUrl = 'https://www.mapquestapi.com/directions/v2/routematrix';
 
     const requestBody = {

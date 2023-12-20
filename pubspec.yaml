@@ -27,6 +27,37 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
+# firebase_core: ^2.15.0
+# This package is part of the Firebase SDK and provides the necessary core functionality for Firebase services in Flutter applications. It needs to be initialized before using any other Firebase services.
+#
+# firebase_auth: ^4.6.1
+# This package is part of the Firebase SDK and provides authentication services for Firebase, allowing you to integrate user authentication features in your Flutter app.
+#
+# curved_navigation_bar: ^1.0.3
+# This is a custom navigation bar widget with a curved design. It's often used to create visually appealing bottom navigation bars in Flutter applications.
+#
+# youtube_player_flutter: ^8.1.2
+# This package allows you to embed YouTube videos in your Flutter app using a YouTube player. It provides a Flutter widget for playing YouTube videos.
+#
+# url_launcher: ^6.1.12
+# The url_launcher package allows you to open URLs in the default web browser on the device. It's useful for launching external links from your Flutter app.
+#
+# cloud_firestore: ^4.8.4
+# This package is part of the Firebase SDK and provides Firestore, a NoSQL cloud database. It allows you to store and sync data in real-time between multiple clients.
+#
+# firebase_messaging: ^14.6.6
+# Another part of the Firebase SDK, this package enables you to receive and handle push notifications in your Flutter app using Firebase Cloud Messaging (FCM).
+#
+# geolocator: ^10.0.0
+# The geolocator package provides geolocation services, allowing you to retrieve the current location of the device. It's useful for applications that require location-based features.
+#
+# http: ^1.1.0
+# The http package allows you to make HTTP requests in your Flutter app. It's essential for interacting with APIs and fetching data from web services.
+#
+# shared_preferences: ^2.2.2
+# This package provides a simple way to store and retrieve key-value pairs persistently. It's often used for storing small amounts of data locally, such as user preferences.
+
 dependencies:
   flutter:
     sdk: flutter
@@ -39,6 +70,7 @@ dependencies:
   firebase_messaging: ^14.6.6
   geolocator: ^10.0.0
   http: ^1.1.0
+  shared_preferences: ^2.2.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '../components/ExplanationPopup.dart';
 import '../components/func.dart';
 
 class SpotsPage extends StatefulWidget {
@@ -99,10 +100,21 @@ class _SpotsPageState extends State<SpotsPage> {
     return userFavoriteSpot == buttonName;
   }
 
+  void _showExplanation(BuildContext context) {
+    ExplanationPopup.show(
+      context: context,
+      pageName: 'עמוד הספוטים',
+      message:
+          'בדף זה בנוסף לפתיחת אפליקציית הניווט לספוט תוכל גם לקבל התראות יומיות על ספוט הבית שלך - אותו תוכל לבחור באמצעות לחיצה על אייקון הלב לחיצה על ספוט אחר, תבטל את הספוט הקודם שנבחר. במידה ולא תרצו להשתמש בהתראות אנא לחצו על הלב הנבחר (ברגע שיהיה אפור תדעו כי לא תתקבל שום התראה על חוף)',
+      prefsKey: 'showExplanation_SpotsPage',
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     fetchUserFavoriteSpot();
+    _showExplanation(context); // Call the explanation method
   }
 
   @override
@@ -115,6 +127,47 @@ class _SpotsPageState extends State<SpotsPage> {
           child: Container(
             margin: EdgeInsets.fromLTRB(20, 10, 20, 75),
             child: Column(children: [
+              // const SizedBox(height: 20),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 10),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(10),
+              //     //border: Border.all(color: Colors.white),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.white.withOpacity(0.5),
+              //         spreadRadius: 5,
+              //         blurRadius: 5,
+              //         offset: Offset(0, 0), // changes position of shadow
+              //       ),
+              //     ],
+              //   ),
+              //   child: RichText(
+              //     textAlign: TextAlign.right,
+              //     text: TextSpan(
+              //       style: TextStyle(color: Colors.black, fontSize: 20),
+              //       children: <TextSpan>[
+              //         TextSpan(
+              //           text: ' הידעת ?',
+              //           style: TextStyle(
+              //               color: Colors.red,
+              //               fontWeight: FontWeight.bold,
+              //               decoration: TextDecoration.underline),
+              //         ),
+              //         TextSpan(
+              //           text:
+              //               ' בדף זה בנוסף לפתיחת אפליקציית הניווט לספוט תוכל גם לקבל התראות יומיות על ספוט הבית שלך - אותו תוכל לבחור באמצעות לחיצה על אייקון הלב \n ',
+              //           style: TextStyle(
+              //               fontSize: 20, fontWeight: FontWeight.bold),
+              //         ),
+              //         TextSpan(
+              //             text:
+              //                 'לחיצה על ספוט אחר, תבטל את הספוט הקודם שנבחר. במידה ולא תרצו להשתמש בהתראות אנא לחצו על הלב הנבחר (ברגע שיהיה אפור תדעו כי לא תתקבל שום התראה על חוף) ')
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              SizedBox(height: 40),
               Container(
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -125,7 +178,8 @@ class _SpotsPageState extends State<SpotsPage> {
                         text: 'חוף בצת \n',
                         style: TextStyle(
                             decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                            height: 1.5),
                       ),
                       TextSpan(
                         text:
@@ -180,7 +234,7 @@ class _SpotsPageState extends State<SpotsPage> {
                       ),
                       TextSpan(
                           text:
-                              "הספוט בקריות נחשב נוח יותר למתחילים. יש בו רצועה חולית ארוכה\n  ",
+                              "\nהספוט בקריות נחשב נוח יותר למתחילים. יש בו רצועה חולית ארוכה\n ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(
                           text:
@@ -274,7 +328,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n חיפה חוף הסטודנטים",
+                          text: "\n חיפה חוף הסטודנטים\n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -324,7 +378,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n חוף המבצר בעתלית",
+                          text: "\nחוף המבצר בעתלית \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -375,7 +429,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n נווה ים",
+                          text: "\nנווה ים \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -420,9 +474,10 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n מעיין צבי",
+                          text: "\nמעיין צבי\n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
+                              height: 1.5,
                               fontWeight: FontWeight.bold)),
                       TextSpan(
                           text:
@@ -469,7 +524,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n קייסריה ושדות ים",
+                          text: "\nקייסריה ושדות ים \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -518,7 +573,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n בית ינאי",
+                          text: "\n בית ינאי \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -567,7 +622,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n נתניה-פולג",
+                          text: "\nנתניה-פולג \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -616,7 +671,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n הרצליה-מעליות",
+                          text: "\nהרצליה-מעליות \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -661,7 +716,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n גאולה",
+                          text: "\n גאולה \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -711,7 +766,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n בת ים",
+                          text: "\n בת ים \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -756,7 +811,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n אילת",
+                          text: "\n אילת\n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -801,7 +856,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n סיני",
+                          text: "\n סיני\n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),
@@ -869,7 +924,7 @@ class _SpotsPageState extends State<SpotsPage> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "\n כנרת-דיאמונד",
+                          text: "\nכנרת-דיאמונד \n",
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold)),

@@ -84,7 +84,7 @@ class _ResetPageState extends State<ResetPage> {
                     const SizedBox(height: 10),
                     Button(
                       text: 'Reset-Password',
-                      onTap: () => resetPassword(context), // from func page
+                      onTap: () => resetPassword(context),
                     ),
                     const SizedBox(height: 10),
                     TextButton(

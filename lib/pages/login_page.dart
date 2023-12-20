@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         password: passController.text,
       );
 
-      Navigator.pop(context);
+      Navigator.pop(context); // CircularProgressIndicator
       Navigator.pushNamed(
           context, NavPage.id); // Navigate to the NavPage on successful sign-in
     } on FirebaseAuthException catch (e) {

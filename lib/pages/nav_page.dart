@@ -44,59 +44,59 @@ class _NavPageState extends State<NavPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('B - S u r f'), // Set the title of the AppBar
-        leading: IconButton(
-          icon: Icon(Icons.menu), // Add a menu icon to open the drawer
-          onPressed: _openDrawer,
-        ),
-        backgroundColor:
-            Colors.transparent, // Set the background color to transparent
-        elevation: 0, // Remove the shadow from the AppBar
-        flexibleSpace: Container(
-          decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
-        ),
-      ),
-      drawer: Drawer(
-        // Add your drawer content here
-        child: Container(
-          color: Colors.white70,
-          child: ListView(
-            children: [
-              DrawerHeader(
-                child: Center(
-                  child: Icon(
-                    Icons.surfing,
-                    size: 100,
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  "Info Page",
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(Icons.info),
-                onTap: () {
-                  Navigator.pushNamed(context, InfoPage.id);
-                },
-              ),
-              ListTile(
-                title: Text(
-                  "Sign out",
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(Icons.logout),
-                onTap: () {
-                  _signOut(); // Call the _signOut function to sign the user out
-                  Navigator.pushNamed(
-                      context, LoginPage.id); // Navigate to the LoginPage
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text('B - S u r f'), // Set the title of the AppBar
+      //   leading: IconButton(
+      //     icon: Icon(Icons.menu), // Add a menu icon to open the drawer
+      //     onPressed: _openDrawer,
+      //   ),
+      //   backgroundColor:
+      //       Colors.transparent, // Set the background color to transparent
+      //   elevation: 0, // Remove the shadow from the AppBar
+      //   flexibleSpace: Container(
+      //     decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
+      //   ),
+      // ),
+      // drawer: Drawer(
+      //   // Add your drawer content here
+      //   child: Container(
+      //     color: Colors.white70,
+      //     child: ListView(
+      //       children: [
+      //         DrawerHeader(
+      //           child: Center(
+      //             child: Icon(
+      //               Icons.surfing,
+      //               size: 100,
+      //             ),
+      //           ),
+      //         ),
+      //         ListTile(
+      //           title: Text(
+      //             "Info Page",
+      //             style: TextStyle(fontSize: 20),
+      //           ),
+      //           leading: Icon(Icons.info),
+      //           onTap: () {
+      //             Navigator.pushNamed(context, InfoPage.id);
+      //           },
+      //         ),
+      //         ListTile(
+      //           title: Text(
+      //             "Sign out",
+      //             style: TextStyle(fontSize: 20),
+      //           ),
+      //           leading: Icon(Icons.logout),
+      //           onTap: () {
+      //             _signOut(); // Call the _signOut function to sign the user out
+      //             Navigator.pushNamed(
+      //                 context, LoginPage.id); // Navigate to the LoginPage
+      //           },
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
       body: Column(
         children: [
           Expanded(
@@ -110,8 +110,8 @@ class _NavPageState extends State<NavPage> {
                   right: 0,
                   bottom: 0,
                   child: CurvedNavigationBar(
-                    color: Colors
-                        .white38, // Set the background color for the bottom navigation bar
+                    color: Colors.grey
+                        .shade50, // Set the background color for the bottom navigation bar
                     backgroundColor: Colors.transparent,
                     index: _currentIndex, // Set the current index
                     onTap: (index) {
@@ -135,20 +135,5 @@ class _NavPageState extends State<NavPage> {
         ],
       ),
     );
-  }
-}
-
-/**
- * Sign out the currently authenticated user.
- *
- * This function attempts to sign out the user using Firebase Authentication.
- * If the sign-out process is successful, the user is logged out.
- * If any errors occur during the sign-out process, they are caught and printed to the console.
- */
-void _signOut() async {
-  try {
-    await FirebaseAuth.instance.signOut();
-  } catch (e) {
-    print("Error signing out: $e");
   }
 }

@@ -32,65 +32,68 @@ class _KitePageState extends State<KitePage> {
         decoration: gradientBoxDecoration, // Apply the gradientBoxDecoration
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              Kite(), // call the spinning image
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Kite Size Calculator',
-                style: TextStyle(fontSize: 30),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Please select your weight range: ',
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
-              ),
-              Container(
-                height: 75,
-                child: Center(
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    onChanged: (newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                        // Update the selected weight range
-                        selectedWeightRange = newValue;
-                        // Look up the corresponding value from the table
-                        result = findValueInTable(newValue);
-                      });
-                    },
-                    items: table.map((entry) {
-                      return DropdownMenuItem<String>(
-                        value: entry['value'].toString(),
-                        child: Text(entry['number'].toString()),
-                      );
-                    }).toList(),
-                  ),
+          child: Center(
+            child: ListView(
+              children: [
+                const SizedBox(height: 20),
+                Kite(), // call the spinning image
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              Center(
-                // Center the DropdownButton
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  width: 125.0,
-                  height: 125.0,
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade300,
-                    shape: BoxShape.circle,
-                  ),
+                Text(
+                  'מהו גודל הקייט המתאים עבורך? בדוק כאן',
+                  style: TextStyle(fontSize: 30),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'בחר כאן את משקלך',
+                  style: TextStyle(fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+                Container(
+                  height: 75,
                   child: Center(
-                    child: Text(
-                      '$selectedWeightRange',
-                      style: TextStyle(color: Colors.white, fontSize: 35),
+                    child: DropdownButton<String>(
+                      value: dropdownValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                          // Update the selected weight range
+                          selectedWeightRange = newValue;
+                          // Look up the corresponding value from the table
+                          result = findValueInTable(newValue);
+                        });
+                      },
+                      items: table.map((entry) {
+                        return DropdownMenuItem<String>(
+                          value: entry['value'].toString(),
+                          child: Text(entry['number'].toString()),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Center(
+                  // Center the DropdownButton
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    width: 125.0,
+                    height: 125.0,
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade300,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$selectedWeightRange',
+                        style: TextStyle(color: Colors.white, fontSize: 35),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
