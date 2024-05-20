@@ -23,7 +23,7 @@ class _KitePageState extends State<KitePage> {
     {'number': '100-110', 'value': '16'},
   ];
 
-  String selectedWeightRange = '10'; // Initialize with the default value
+  // String selectedWeightRange = '10'; // Initialize with the default value
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +58,9 @@ class _KitePageState extends State<KitePage> {
                       value: dropdownValue,
                       onChanged: (newValue) {
                         setState(() {
-                          dropdownValue = newValue!;
                           // Update the selected weight range
-                          selectedWeightRange = newValue;
+                          dropdownValue = newValue!;
+                          //   selectedWeightRange = newValue;
                           // Look up the corresponding value from the table
                           result = findValueInTable(newValue);
                         });
@@ -86,7 +86,8 @@ class _KitePageState extends State<KitePage> {
                     ),
                     child: Center(
                       child: Text(
-                        '$selectedWeightRange',
+                        //'$selectedWeightRange',
+                        "$dropdownValue",
                         style: TextStyle(color: Colors.white, fontSize: 35),
                       ),
                     ),

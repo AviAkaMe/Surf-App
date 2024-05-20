@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExplanationPopup {
+  // This method shows an explanation popup if it's set to be shown.
   static Future<void> show({
     required BuildContext context,
     required String pageName,
     dynamic message,
     required String prefsKey,
   }) async {
+    // Get an instance of SharedPreferences to manage user preferences.
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Retrieve the flag for showing the explanation, defaulting to true if not set.
     bool showExplanation = prefs.getBool(prefsKey) ?? true;
 
+    // Display the explanation popup if the flag is set to true.
     if (showExplanation) {
       await showDialog(
         context: context,
         builder: (BuildContext context) {
+          // Build and return an AlertDialog
           return AlertDialog(
             title: Text('ברוכים הבאים ל$pageName'),
             content: _buildContent(message),
@@ -24,8 +29,8 @@ class ExplanationPopup {
                 children: [
                   TextButton(
                     onPressed: () {
-                      prefs.setBool(prefsKey, false);
-                      Navigator.of(context).pop();
+                      prefs.setBool(prefsKey, false); // Set the flag to false.
+                      Navigator.of(context).pop(); // Close the popup.
                     },
                     child: Text('OK'),
                   )
@@ -39,6 +44,7 @@ class ExplanationPopup {
   }
 
   static Widget _buildContent(dynamic message) {
+    // This method builds the content based on the type of message provided.
     if (message is String) {
       return Text(message);
     } else if (message is List<Map<IconData, String>>) {
@@ -50,6 +56,7 @@ class ExplanationPopup {
   }
 
   static Widget _buildIconTextPairsContent(
+      // This method builds the content for a list of icon-text pairs
       List<Map<IconData, String>> messages) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -71,10 +78,12 @@ class ExplanationPopup {
     );
   }
 
+// This method builds an icon based on the provided IconData.
   static Widget _buildIcon(IconData icon) {
     return Icon(icon, size: 35);
   }
 
+  // This method resets the flags for showing explanations for all pages.
   static Future<void> resetFlags() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // Reset the flags for all pages

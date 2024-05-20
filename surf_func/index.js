@@ -46,7 +46,7 @@ async function calculateTravelTimes(lat, lng) {
     console.log('Updated Destination Locations:', JSON.stringify(locations));
 
     // Prepare API request for MapQuest Distance Matrix API
-    const apiKey = 'ohMy4kFEAKR7yTcBrX9R9OKPRIn3IM9B';
+    const apiKey = '*******';
     const apiUrl = 'https://www.mapquestapi.com/directions/v2/routematrix';
 
     const requestBody = {
@@ -65,8 +65,8 @@ async function calculateTravelTimes(lat, lng) {
       const travelTimes = response.data.time.map((duration, index) => {
         const minutes = Math.round(duration / 60); // Convert duration to rounded minutes
         return {
-          duration: duration,
-          name: locations[index].name, // Use the modified locations array
+          duration: duration, //    in sec
+          name: locations[index].name, //   Use the modified locations array
           durationMinutes: minutes
         };
       });
@@ -114,6 +114,9 @@ exports.findSpotsWind = functions.https.onRequest(async (request, response) => {
             totalMinutes = (hours * 60) + minutes;
         }
 
+
+        //  Today: 2023-12-24T12:34:56.789Z
+        //  Formatted Today: 2023-12-24
         const today = new Date();
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -267,7 +270,7 @@ async function getStrongWinds(date, travelTimesData) {
                 relevantWindspeedData = hourlyData.windspeed_10m.slice(5, 5 + 11);
             }
 
-            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 11); // speed in knots
+            const earliestIndex = relevantWindspeedData.findIndex(speed => speed >= 6); // speed in knots
 
             if (earliestIndex !== -1) {
                 const earliestTime = new Date(relevantHourlyData[earliestIndex]);

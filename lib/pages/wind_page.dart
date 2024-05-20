@@ -59,10 +59,10 @@ class _WindPageState extends State<WindPage> {
           },
         );
       } else {
-        // Permission granted. You can proceed to get the user's location.
+        // Permission granted. proceed to get the user's location.
         Position position = await Geolocator.getCurrentPosition();
         premi = true;
-        // Now you can send this location to your cloud app.
+        // sending this location to the cloud.
         setState(() {
           _userLocation = position;
         });
@@ -71,10 +71,10 @@ class _WindPageState extends State<WindPage> {
       // The user has permanently denied location permissions.
       showPermanentlyDeniedDialog(context);
     } else {
-      // Permission already granted. You can proceed to get the user's location.
+      // Permission already granted. proceed to get the user's location.
       Position position = await Geolocator.getCurrentPosition();
       premi = true;
-      // Now you can send this location to your cloud app.
+      //  sending this location to the cloud.
       setState(() {
         _userLocation = position;
       });

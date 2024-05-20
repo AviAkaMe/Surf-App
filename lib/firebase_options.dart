@@ -50,7 +50,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDjPQB1DyqH5Tk90vxOyD4_hRUrejsnQ8g',
+    apiKey: '*******',
     appId: '1:871763687694:android:fe7fec7c4015c492577f5f',
     messagingSenderId: '871763687694',
     projectId: 'b-surf',
@@ -58,12 +58,13 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCx7kdd9VUZxxti3cOCcDuHxfCiF0ZHr8g',
+    apiKey: '*******',
     appId: '1:871763687694:ios:273cf2aceff8ee7e577f5f',
     messagingSenderId: '871763687694',
     projectId: 'b-surf',
     storageBucket: 'b-surf.appspot.com',
-    iosClientId: '871763687694-f222kn4h14h6h57iheh18i7ho7640kt6.apps.googleusercontent.com',
+    iosClientId:
+        '871763687694-f222kn4h14h6h57iheh18i7ho7640kt6.apps.googleusercontent.com',
     iosBundleId: 'com.example.bSurf',
   );
 }
